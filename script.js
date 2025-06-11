@@ -99,13 +99,12 @@ function showGradingInputs() {
     let foundAny = false;
     let selectedBlocks = {};
     let sliderValues = {};
-    html += '<form id="grading-form">';
+    // Prepare a list of activities to show one by one
+    let activityList = [];
     uploadedActivities.forEach((act, aidx) => {
-        // Hide test léger-navette for sec 1-2 (by both name variants)
         if ((act.name === 'test léger-navette' || act.name.toLowerCase().includes('navette')) && (userGradeSelect.value === '1' || userGradeSelect.value === '2')) {
             return;
         }
-        // Special exception for test léger-navette (by both name variants)
         let crit;
         if (act.name === 'test léger-navette' || act.name.toLowerCase().includes('navette')) {
             let overrideAge = userAge;
@@ -117,49 +116,57 @@ function showGradingInputs() {
         }
         if (!crit) return;
         foundAny = true;
-        html += `<div class="activity"><strong>${act.name}</strong> <span style="color:#888;font-size:0.95em;">[${crit.criteria}]</span><br>Max : ${crit.maxScore}<br>`;
-        html += '<div class="block-list">';
-        crit.scale.forEach((block, bidx) => {
-            html += `<button type="button" class="block-btn" data-aidx="${aidx}" data-bidx="${bidx}" style="margin:4px;">Score ${block.min} - ${block.max} → ${block.points} pts</button>`;
-        });
-        html += `<span id="block-result-${aidx}" style="margin-left:10px;color:#007bff;"></span>`;
-        // Ajout du conteneur du slider (sera affiché dynamiquement)
-        html += `<div id="slider-container-${aidx}" style="margin-top:10px;display:none;"></div>`;
-        html += '</div></div>';
+        activityList.push({ act, aidx, crit });
         totalPossible += Math.max(...crit.scale.map(b => b.points));
     });
-    html += foundAny ? '<button type="submit">Calculer</button></form>' : '';
-    html += foundAny ? '<div id="grading-result" style="margin-top:20px;font-size:1.2em;"></div>' : '<div style="color:red;margin-top:20px;">Aucune activité ne correspond à vos critères.</div>';
-    gradingSection.innerHTML = html;
-    if (foundAny) {
+    if (!foundAny) {
+        gradingSection.innerHTML = '<div style="color:red;margin-top:20px;">Aucune activité ne correspond à vos critères.</div>';
+        return;
+    }
+    let currentIndex = 0;
+    function renderCurrentActivity() {
+        const { act, aidx, crit } = activityList[currentIndex];
+        let activityHtml = '';
+        activityHtml += `<form id="grading-form" style="width:100%;max-width:none;">`;
+        activityHtml += `<div class="activity" style="width:100%;box-sizing:border-box;">`;
+        activityHtml += `<strong>${act.name}</strong> <span style="color:#888;font-size:0.95em;">[${crit.criteria}]</span><br>Max : ${crit.maxScore}<br>`;
+        activityHtml += '<div class="block-list">';
+        crit.scale.forEach((block, bidx) => {
+            activityHtml += `<button type="button" class="block-btn" data-aidx="${aidx}" data-bidx="${bidx}" style="margin:4px;width:100%;">Score ${block.min} - ${block.max} → ${block.points} pts</button>`;
+        });
+        activityHtml += `<span id="block-result-${aidx}" style="margin-left:10px;color:#007bff;"></span>`;
+        activityHtml += `<div id="slider-container-${aidx}" style="margin-top:10px;display:none;"></div>`;
+        activityHtml += '</div>';
+        activityHtml += '</div>';
+        activityHtml += '<div style="display:flex;justify-content:space-between;margin-top:20px;width:100%;">';
+        if (currentIndex > 0) {
+            activityHtml += '<button type="button" id="prev-btn">Précédent</button>';
+        } else {
+            activityHtml += '<span></span>';
+        }
+        if (currentIndex < activityList.length - 1) {
+            activityHtml += '<button type="button" id="next-btn">Suivant</button>';
+        } else {
+            activityHtml += '<button type="submit">Calculer</button>';
+        }
+        activityHtml += '</div>';
+        activityHtml += '<div id="grading-result" style="margin-top:20px;font-size:1.2em;"></div>';
+        activityHtml += '</form>';
+        gradingSection.innerHTML = activityHtml;
+        // Block button logic
         document.querySelectorAll('.block-btn').forEach(btn => {
             btn.onclick = function() {
                 const aidx = btn.getAttribute('data-aidx');
                 const bidx = btn.getAttribute('data-bidx');
-                // Deselect all for this activity
                 document.querySelectorAll(`.block-btn[data-aidx='${aidx}']`).forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
                 selectedBlocks[aidx] = bidx;
-                // Show selection
-                const act = uploadedActivities[aidx];
-                let crit;
-                if (act.name === 'test léger-navette' || act.name.toLowerCase().includes('navette')) {
-                    let overrideAge = userAge;
-                    if (userGradeSelect.value === '3') overrideAge = 15;
-                    if (userGradeSelect.value === '4' || userGradeSelect.value === '5') overrideAge = 17;
-                    crit = act.criteria.find(c => c.gender === userGender && c.age === overrideAge);
-                } else {
-                    crit = act.criteria.find(c => c.gender === userGender && c.age === userAge);
-                }
                 const block = crit.scale[bidx];
                 document.getElementById(`block-result-${aidx}`).textContent = `Sélectionné : Score ${block.min}-${block.max} → ${block.points} pts`;
-                // Afficher le slider
+                // Show slider
                 const sliderContainer = document.getElementById(`slider-container-${aidx}`);
-                // Masquer tous les sliders des autres blocks de cette activité
-                document.querySelectorAll(`[id^='slider-container-${aidx}']`).forEach(div => div.style.display = 'none');
                 sliderContainer.style.display = 'block';
                 sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <input type="number" id="slider-input-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:70px;" autocomplete="off"></label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:200px;margin-left:10px;">`;
-                // Synchronisation slider <-> input
                 const slider = document.getElementById(`slider-${aidx}`);
                 const input = document.getElementById(`slider-input-${aidx}`);
                 input.removeAttribute('readonly');
@@ -168,20 +175,27 @@ function showGradingInputs() {
                     input.value = slider.value;
                 };
                 input.oninput = function() {
-                    let val = parseFloat(input.value);
-                    if (isNaN(val)) val = block.min;
-                    if (val < block.min) val = block.min;
-                    if (val > block.max) val = block.max;
-                    input.value = val;
-                    slider.value = val;
+                    slider.value = input.value;
                 };
             };
         });
+        // Navigation logic
+        if (currentIndex > 0) {
+            document.getElementById('prev-btn').onclick = function() {
+                currentIndex--;
+                renderCurrentActivity();
+            };
+        }
+        if (currentIndex < activityList.length - 1) {
+            document.getElementById('next-btn').onclick = function() {
+                currentIndex++;
+                renderCurrentActivity();
+            };
+        }
         document.getElementById('grading-form').onsubmit = function(e) {
             e.preventDefault();
             let total = 0;
             uploadedActivities.forEach((act, aidx) => {
-                // Special exception for test léger-navette
                 let crit;
                 if (act.name === 'test léger-navette') {
                     let overrideAge = userAge;
@@ -202,6 +216,7 @@ function showGradingInputs() {
             document.getElementById('grading-result').innerHTML = `<strong>Total : ${total} / ${totalPossible} pts (${percent}%)</strong>`;
         };
     }
+    renderCurrentActivity();
 }
 
 // --- Chargement automatique du fichier JSON au démarrage ---

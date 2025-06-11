@@ -1,0 +1,13 @@
+Version 3
+ajouter une fonction pour enregistrer le score sous le type json
+ajouter une fonction pour nommer le fichier de téléchargement avec le nom et paramètres de l'élève
+Version 3.1
+ajouter une page de correction pour rassembler et donner tout les notes dans une seule page
+ajouter une fonction pour créer des tableaux en pdf pour une vue globale
+ajouter des fonctions de statistiques pour chaque acctivitée
+Version 4
+transférer sur testphisyque.harrylevesque.dev
+créer le system nuage
+créer le system de comptes, idantifiant d'utilisateur
+intégrer les pages de création dans le compte de prof
+intégrer les pages de corrections
