@@ -158,10 +158,12 @@ function showGradingInputs() {
                 // Masquer tous les sliders des autres blocks de cette activité
                 document.querySelectorAll(`[id^='slider-container-${aidx}']`).forEach(div => div.style.display = 'none');
                 sliderContainer.style.display = 'block';
-                sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <input type="number" id="slider-input-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:70px;"> </label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:200px;margin-left:10px;">`;
+                sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <input type="number" id="slider-input-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:70px;" autocomplete="off"></label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:200px;margin-left:10px;">`;
                 // Synchronisation slider <-> input
                 const slider = document.getElementById(`slider-${aidx}`);
                 const input = document.getElementById(`slider-input-${aidx}`);
+                input.removeAttribute('readonly');
+                input.disabled = false;
                 slider.oninput = function() {
                     input.value = slider.value;
                 };
