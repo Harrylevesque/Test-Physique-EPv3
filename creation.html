@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créateur de système de notation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Créateur de système de notation</h1>
+        <button id="download-btn" style="margin-bottom:20px;">Télécharger les données</button>
+        <input type="file" id="upload-json" accept="application/json" style="margin-bottom:20px;">
+        <form id="activity-form">
+            <input type="text" id="activity-name" placeholder="Nom de l'activité" required>
+            <button type="submit">Ajouter une activité</button>
+        </form>
+        <div id="activities-list"></div>
+    </div>
+    <script src="creation.js"></script>
+</body>
+</html>
