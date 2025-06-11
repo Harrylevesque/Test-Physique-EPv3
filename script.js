@@ -1,9 +1,37 @@
-
 // Remove all creation logic from this file. Only keep the grading system usage logic (upload, user selection, grading calculation).
 // --- Grading System Usage Page Logic ---
 let uploadedActivities = [];
 let userGender = '';
 let userAge = '';
+
+// --- Popup fonctionnalités à venir ---
+const openFeaturesBtn = document.getElementById('open-features-btn');
+const featuresModal = document.getElementById('features-modal');
+const closeFeaturesModal = document.getElementById('close-features-modal');
+const featuresIcon = document.createElement('div');
+featuresIcon.id = 'features-fab';
+featuresIcon.title = 'Fonctionnalités à venir';
+featuresIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" fill="#007bff"/><text x="12" y="17" text-anchor="middle" font-size="14" fill="#fff" font-family="Arial">★</text></svg>';
+document.body.appendChild(featuresIcon);
+
+openFeaturesBtn.onclick = function() {
+    featuresModal.style.display = 'block';
+};
+closeFeaturesModal.onclick = function() {
+    featuresModal.style.display = 'none';
+};
+window.onclick = function(event) {
+    if (event.target === featuresModal) {
+        featuresModal.style.display = 'none';
+    }
+};
+featuresIcon.onclick = function() {
+    featuresModal.style.display = 'block';
+};
+// Ouvre la popup automatiquement au chargement
+window.addEventListener('DOMContentLoaded', function() {
+    featuresModal.style.display = 'block';
+});
 
 const uploadInput = document.getElementById('upload-json');
 const userForm = document.getElementById('user-form');

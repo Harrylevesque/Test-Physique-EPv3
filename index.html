@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,6 +9,7 @@
 <body>
 <div class="container">
     <h1>Calculateur de système de notation</h1>
+    <button id="open-features-btn" style="margin-bottom:15px;">Fonctionnalités à venir</button>
     <input type="file" id="upload-json" accept="application/json" style="margin-bottom:20px;">
     <div id="user-form" style="display:none;margin-bottom:20px;">
         <label>Année scolaire :
@@ -31,6 +31,41 @@
         <button id="start-btn">Commencer</button>
     </div>
     <div id="grading-section"></div>
+</div>
+<!-- Popup modale pour les fonctionnalités à venir -->
+<div id="features-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="close-features-modal">&times;</span>
+    <h1>Fonctionnalités à venir</h1>
+    <div id="features-list">
+      <hr>
+      <h2>Version 3</h2>
+        <h3>Fonction proposées</h3>
+        <ul>
+            <li>ajouter un slider pour permettre d'Entrer le score précis</li>
+            <li>ajouter une fonction pour enregistrer le score sous le type json</li>
+            <li>ajouter une fonction pour nommer le fichier de téléchargement avec le nom et paramètres de l'élève</li>
+        </ul>
+      <hr>
+      <h2>Version 3.1</h2>
+        <ul>
+            <li>ajouter une page de correction pour rassembler et donner tout les notes dans une seule page</li>
+            <li>ajouter une fonction pour créer des tableaux en pdf pour une vue globale</li>
+            <li>ajouter des fonctions de statistiques pour chaque acctivitée</li>
+        </ul>
+
+      <hr>
+      <h2>Version 4</h2>
+        <ul>
+            <li>transférer sur testphisyque.harrylevesque.dev</li>
+            <li>créer le system nuage</li>
+            <li>créer le system de comptes, idantifiant d'utilisateur</li>
+            <li>intégrer les pages de création dans le compte de prof</li>
+            <li>intégrer les pages de corrections</li>
+        </ul>
+      </ul>
+    </div>
+  </div>
 </div>
 <script src="script.js"></script>
 </body>
