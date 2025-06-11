@@ -158,12 +158,20 @@ function showGradingInputs() {
                 // Masquer tous les sliders des autres blocks de cette activité
                 document.querySelectorAll(`[id^='slider-container-${aidx}']`).forEach(div => div.style.display = 'none');
                 sliderContainer.style.display = 'block';
-                sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <span id="slider-value-${aidx}">${block.min}</span></label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:200px;margin-left:10px;">`;
-                // Mettre à jour la valeur affichée lors du déplacement du slider
+                sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <input type="number" id="slider-input-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:70px;"> </label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:200px;margin-left:10px;">`;
+                // Synchronisation slider <-> input
                 const slider = document.getElementById(`slider-${aidx}`);
-                const sliderValue = document.getElementById(`slider-value-${aidx}`);
+                const input = document.getElementById(`slider-input-${aidx}`);
                 slider.oninput = function() {
-                    sliderValue.textContent = slider.value;
+                    input.value = slider.value;
+                };
+                input.oninput = function() {
+                    let val = parseFloat(input.value);
+                    if (isNaN(val)) val = block.min;
+                    if (val < block.min) val = block.min;
+                    if (val > block.max) val = block.max;
+                    input.value = val;
+                    slider.value = val;
                 };
             };
         });
