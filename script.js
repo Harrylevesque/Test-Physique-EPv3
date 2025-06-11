@@ -98,6 +98,7 @@ function showGradingInputs() {
     let totalPossible = 0;
     let foundAny = false;
     let selectedBlocks = {};
+    let sliderValues = {};
     html += '<form id="grading-form">';
     uploadedActivities.forEach((act, aidx) => {
         // Hide test léger-navette for sec 1-2 (by both name variants)
@@ -122,6 +123,8 @@ function showGradingInputs() {
             html += `<button type="button" class="block-btn" data-aidx="${aidx}" data-bidx="${bidx}" style="margin:4px;">Score ${block.min} - ${block.max} → ${block.points} pts</button>`;
         });
         html += `<span id="block-result-${aidx}" style="margin-left:10px;color:#007bff;"></span>`;
+        // Ajout du conteneur du slider (sera affiché dynamiquement)
+        html += `<div id="slider-container-${aidx}" style="margin-top:10px;display:none;"></div>`;
         html += '</div></div>';
         totalPossible += Math.max(...crit.scale.map(b => b.points));
     });
@@ -129,7 +132,6 @@ function showGradingInputs() {
     html += foundAny ? '<div id="grading-result" style="margin-top:20px;font-size:1.2em;"></div>' : '<div style="color:red;margin-top:20px;">Aucune activité ne correspond à vos critères.</div>';
     gradingSection.innerHTML = html;
     if (foundAny) {
-        // Add click listeners to block buttons
         document.querySelectorAll('.block-btn').forEach(btn => {
             btn.onclick = function() {
                 const aidx = btn.getAttribute('data-aidx');
@@ -140,9 +142,8 @@ function showGradingInputs() {
                 selectedBlocks[aidx] = bidx;
                 // Show selection
                 const act = uploadedActivities[aidx];
-                // Special exception for test léger-navette
                 let crit;
-                if (act.name === 'test léger-navette') {
+                if (act.name === 'test léger-navette' || act.name.toLowerCase().includes('navette')) {
                     let overrideAge = userAge;
                     if (userGradeSelect.value === '3') overrideAge = 15;
                     if (userGradeSelect.value === '4' || userGradeSelect.value === '5') overrideAge = 17;
@@ -152,6 +153,18 @@ function showGradingInputs() {
                 }
                 const block = crit.scale[bidx];
                 document.getElementById(`block-result-${aidx}`).textContent = `Sélectionné : Score ${block.min}-${block.max} → ${block.points} pts`;
+                // Afficher le slider
+                const sliderContainer = document.getElementById(`slider-container-${aidx}`);
+                // Masquer tous les sliders des autres blocks de cette activité
+                document.querySelectorAll(`[id^='slider-container-${aidx}']`).forEach(div => div.style.display = 'none');
+                sliderContainer.style.display = 'block';
+                sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <span id="slider-value-${aidx}">${block.min}</span></label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:200px;margin-left:10px;">`;
+                // Mettre à jour la valeur affichée lors du déplacement du slider
+                const slider = document.getElementById(`slider-${aidx}`);
+                const sliderValue = document.getElementById(`slider-value-${aidx}`);
+                slider.oninput = function() {
+                    sliderValue.textContent = slider.value;
+                };
             };
         });
         document.getElementById('grading-form').onsubmit = function(e) {
