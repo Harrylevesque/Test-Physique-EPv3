@@ -213,12 +213,78 @@ function showGradingInputs() {
                 }
             });
             let percent = totalPossible ? ((total / totalPossible) * 100).toFixed(2) : '0.00';
-            document.getElementById('grading-result').innerHTML = `<strong>Total : ${total} / ${totalPossible} pts (${percent}%)</strong>`;
+            // Add name input before download button
+            document.getElementById('grading-result').innerHTML = `
+                <strong>Total : ${total} / ${totalPossible} pts (${percent}%)</strong><br>
+                <label for="user-name-input">Votre nom : </label>
+                <input type="text" id="user-name-input" style="margin-right:10px;" placeholder="Entrez votre nom" required>
+                <button type="button" id="download-result-btn" style="margin-top:15px;">Télécharger JSON</button>
+            `;
+            // Download JSON logic
+            const downloadBtn = document.getElementById('download-result-btn');
+            if (downloadBtn) {
+                downloadBtn.onclick = function() {
+                    const userName = document.getElementById('user-name-input').value.trim();
+                    if (!userName) {
+                        alert('Veuillez entrer votre nom avant de télécharger.');
+                        return;
+                    }
+                    let results = {
+                        settings: {
+                            grade: userGradeSelect.value,
+                            gender: userGender,
+                            age: userAge
+                        },
+                        activities: []
+                    };
+                    uploadedActivities.forEach((act, aidx) => {
+                        let crit;
+                        if (act.name === 'test léger-navette') {
+                            let overrideAge = userAge;
+                            if (userGradeSelect.value === '3') overrideAge = 15;
+                            if (userGradeSelect.value === '4' || userGradeSelect.value === '5') overrideAge = 17;
+                            crit = act.criteria.find(c => c.gender === userGender && c.age === overrideAge);
+                        } else {
+                            crit = act.criteria.find(c => c.gender === userGender && c.age === userAge);
+                        }
+                        if (!crit) return;
+                        const bidx = selectedBlocks[aidx];
+                        if (bidx !== undefined) {
+                            const block = crit.scale[bidx];
+                            let preciseScore = null;
+                            const sliderInput = document.getElementById(`slider-input-${aidx}`);
+                            if (sliderInput) {
+                                preciseScore = sliderInput.value;
+                            }
+                            results.activities.push({
+                                name: act.name,
+                                criteria: crit.criteria,
+                                blockRange: { min: block.min, max: block.max },
+                                blockPoints: block.points,
+                                preciseScore: preciseScore
+                            });
+                        }
+                    });
+                    const dataStr = JSON.stringify(results, null, 2);
+                    const blob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    // Build code: G/F + grade + age
+                    const genderCode = userGender === 'Boy' ? 'G' : (userGender === 'Girl' ? 'F' : 'X');
+                    const code = `${genderCode}${userGradeSelect.value}${userAge}`;
+                    const filename = `${userName}_${code}.json`;
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                };
+            }
         };
     }
-    renderCurrentActivity();
+    renderCurrentActivity(); // This call is now correctly placed at the end of showGradingInputs, to render the initial activity.
 }
-
 // --- Chargement automatique du fichier JSON au démarrage ---
 fetch('scr/fullversion.json')
     .then(r => r.json())
