@@ -9,8 +9,9 @@
 <body>
 <div class="container">
     <h1>Calculateur de système de notation</h1>
-    <button id="open-features-btn" style="margin-bottom:15px;">Fonctionnalités à venir</button>
-    <input type="file" id="upload-json" accept="application/json" style="margin-bottom:20px;">
+
+    <input type="file" id="upload-json" accept="application/json" style="margin-bottom:20px;
+                                                                         display:none;">
     <div id="user-form" style="display:none;margin-bottom:20px;">
         <label>Année scolaire :
             <select id="user-grade">
@@ -116,7 +117,6 @@ menuCreationBtn.onclick = function() {
 };
 menuCorrectionBtn.onclick = function() {
   window.location.href = 'correction.html';
-};
 </script>
 </body>
 </html>
