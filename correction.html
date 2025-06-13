@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correction des résultats</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+<div class="container" style="max-width: 1600px; margin: 0 auto;">
+    <h1>Correction des résultats</h1>
+    <input type="file" id="upload-zip" accept="application/zip" style="margin-bottom:20px;">
+    <div id="students-list-wrapper" style="overflow-x: auto; width: 100%;">
+        <div id="students-list"></div>
+    </div>
+</div>
+<script>
+// Utilise JSZip pour lire le zip et afficher les données de chaque élève
+
+document.getElementById('upload-zip').addEventListener('change', async function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const studentsListDiv = document.getElementById('students-list');
+    studentsListDiv.innerHTML = ''; // Clear previous results
+
+    // Table structure
+    let tableHtml = `<table border="1" cellpadding="5" style="border-collapse:collapse; width:auto; text-align:left; min-width: 100%;">
+        <thead>
+            <tr>
+                <th style="padding:4px; white-space:nowrap; background-color: #f2f2f2;">Nom du fichier</th>
+                <th style="padding:4px; white-space:nowrap; background-color: #f2f2f2;">Âge</th>
+                <th style="padding:4px; white-space:nowrap; background-color: #f2f2f2;">Sexe</th>
+                <th style="padding:4px; white-space:nowrap; background-color: #f2f2f2;">Grade</th>
+                <th style="padding:4px; background-color: #f2f2f2;">Scores par activité</th>
+                <th style="padding:4px; white-space:nowrap; background-color: #f2f2f2;">Total Général</th>
+            </tr>
+        </thead>
+        <tbody id="students-table-body"></tbody>
+    </table>`;
+    studentsListDiv.innerHTML = tableHtml;
+    const tableBody = document.getElementById('students-table-body');
+
+    const zip = await JSZip.loadAsync(file);
+    const jsonFiles = Object.keys(zip.files).filter(name => name.endsWith('.json'));
+    for (const filename of jsonFiles) {
+        const content = await zip.files[filename].async('string');
+        let data;
+        try {
+            data = JSON.parse(content);
+        } catch (e) {
+            console.error("Error parsing JSON for file:", filename, e);
+            continue;
+        }
+
+        const age = data.age || (data.settings && data.settings.age) || '';
+        const sexe = data.sexe || data.gender || (data.settings && (data.settings.sexe || data.settings.gender)) || '';
+        const grade = data.grade || (data.settings && data.settings.grade) || '';
+
+        let activitiesArray = [];
+        if (Array.isArray(data)) {
+            activitiesArray = data;
+        } else if (data.activities && Array.isArray(data.activities)) {
+            activitiesArray = data.activities;
+        } else if (data.Activities && Array.isArray(data.Activities)) {
+            activitiesArray = data.Activities;
+        } else if (data.scores && Array.isArray(data.scores)) {
+            activitiesArray = data.scores;
+        }
+        activitiesArray = activitiesArray.filter(item => typeof item === 'object' && item !== null);
+
+        let scoresContent = '';
+        let totalActivityPointsSum = 0;
+        let totalActivityMaxPointsSum = 0;
+
+        if (activitiesArray.length > 0) {
+            scoresContent = activitiesArray.map(a => {
+                const activityName = a.name || 'N/A';
+                const criteria = a.criteria || '';
+                const blockRangeText = (a.blockRange && a.blockRange.min !== undefined && a.blockRange.max !== undefined)
+                    ? `(${a.blockRange.min}-${a.blockRange.max})`
+                    : '';
+                const preciseScoreDisplay = (a.preciseScore !== null && a.preciseScore !== undefined)
+                    ? String(a.preciseScore)
+                    : 'N/A';
+                const pointsObtenus = (a.blockPoints !== undefined && a.blockPoints !== null)
+                    ? Number(a.blockPoints)
+                    : 0;
+
+                // For this logic, max points per activity is always 10
+                const pointsPossibles = 10;
+
+                totalActivityPointsSum += pointsObtenus;
+                totalActivityMaxPointsSum += pointsPossibles;
+
+                return `<span style="border: 1px solid #ccc; padding: 3px 6px; margin-right: 8px; display: inline-block; white-space: nowrap; background-color: #f9f9f9; border-radius: 4px; margin-bottom: 3px;">` +
+                       `<strong>${activityName}</strong> ${criteria ? '[' + criteria + ']' : ''} ${blockRangeText}: ` +
+                       `Score: ${preciseScoreDisplay}, Pts: ${pointsObtenus}/${pointsPossibles}` +
+                       `</span>`;
+            }).join('');
+
+            // Add a summary span for totals of activities
+            scoresContent += `<span style="border: 1px solid #aaa; padding: 3px 6px; margin-right: 8px; display: inline-block; white-space: nowrap; background-color: #e0e0e0; border-radius: 4px; font-weight: bold; margin-top: 5px;">` +
+                             `Total Activités: Pts: ${totalActivityPointsSum}/${totalActivityMaxPointsSum}` +
+                             `</span>`;
+
+        } else {
+            scoresContent = 'Aucune activité détaillée trouvée.';
+        }
+
+        // Calculate overall total as (sum of blockPoints) / (number of activities * 10) * 100
+        let overallTotal;
+        if (activitiesArray.length === 0) {
+            overallTotal = 'N/A';
+        } else {
+            overallTotal = ((totalActivityPointsSum / totalActivityMaxPointsSum) * 100).toFixed(2) + '%';
+        }
+
+        const rowHtml = `
+            <tr>
+                <td style="padding:4px; white-space:nowrap;">${filename}</td>
+                <td style="padding:4px; white-space:nowrap;">${age}</td>
+                <td style="padding:4px; white-space:nowrap;">${sexe}</td>
+                <td style="padding:4px; white-space:nowrap;">${grade}</td>
+                <td style="padding:4px;">${scoresContent}</td>
+                <td style="padding:4px; white-space:nowrap;">${overallTotal}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += rowHtml;
+    }
+});
+</script>
+</body>
+</html>
