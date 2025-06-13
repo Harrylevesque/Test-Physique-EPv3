@@ -49,7 +49,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -103,7 +103,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -157,7 +157,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -211,10 +211,10 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       }
     ],
-    "showCriteriaForm": true
+    "showCriteriaForm": false
   },
   {
     "name": "Flexibilité",
@@ -251,7 +251,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -285,7 +285,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -319,7 +319,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -353,7 +353,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -387,7 +387,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -421,7 +421,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -455,7 +455,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -489,7 +489,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -523,7 +523,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -557,7 +557,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -591,7 +591,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -625,10 +625,10 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       }
     ],
-    "showCriteriaForm": true
+    "showCriteriaForm": false
   },
   {
     "name": "Course d’endurance",
@@ -639,19 +639,63 @@
         "criteria": "course d’endurance",
         "maxScore": 10,
         "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
+          {
+            "min": 0,
+            "max": 0,
+            "points": 10
+          },
+          {
+            "min": 1,
+            "max": 1,
+            "points": 9
+          },
+          {
+            "min": 2,
+            "max": 2,
+            "points": 8
+          },
+          {
+            "min": 3,
+            "max": 3,
+            "points": 7
+          },
+          {
+            "min": 4,
+            "max": 4,
+            "points": 6
+          },
+          {
+            "min": 5,
+            "max": 5,
+            "points": 5
+          },
+          {
+            "min": 6,
+            "max": 6,
+            "points": 4
+          },
+          {
+            "min": 7,
+            "max": 7,
+            "points": 3
+          },
+          {
+            "min": 8,
+            "max": 8,
+            "points": 2
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "points": 1
+          },
+          {
+            "min": 10,
+            "max": 10,
+            "points": 0
+          }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -659,19 +703,63 @@
         "criteria": "course d’endurance",
         "maxScore": 10,
         "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
+          {
+            "min": 0,
+            "max": 0,
+            "points": 10
+          },
+          {
+            "min": 1,
+            "max": 1,
+            "points": 9
+          },
+          {
+            "min": 2,
+            "max": 2,
+            "points": 8
+          },
+          {
+            "min": 3,
+            "max": 3,
+            "points": 7
+          },
+          {
+            "min": 4,
+            "max": 4,
+            "points": 6
+          },
+          {
+            "min": 5,
+            "max": 5,
+            "points": 5
+          },
+          {
+            "min": 6,
+            "max": 6,
+            "points": 4
+          },
+          {
+            "min": 7,
+            "max": 7,
+            "points": 3
+          },
+          {
+            "min": 8,
+            "max": 8,
+            "points": 2
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "points": 1
+          },
+          {
+            "min": 10,
+            "max": 10,
+            "points": 0
+          }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -679,79 +767,63 @@
         "criteria": "course d’endurance",
         "maxScore": 10,
         "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
+          {
+            "min": 0,
+            "max": 0,
+            "points": 10
+          },
+          {
+            "min": 1,
+            "max": 1,
+            "points": 9
+          },
+          {
+            "min": 2,
+            "max": 2,
+            "points": 8
+          },
+          {
+            "min": 3,
+            "max": 3,
+            "points": 7
+          },
+          {
+            "min": 4,
+            "max": 4,
+            "points": 6
+          },
+          {
+            "min": 5,
+            "max": 5,
+            "points": 5
+          },
+          {
+            "min": 6,
+            "max": 6,
+            "points": 4
+          },
+          {
+            "min": 7,
+            "max": 7,
+            "points": 3
+          },
+          {
+            "min": 8,
+            "max": 8,
+            "points": 2
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "points": 1
+          },
+          {
+            "min": 10,
+            "max": 10,
+            "points": 0
+          }
         ],
-        "showScaleForm": true
-      },
-      {
-        "gender": "Girl",
-        "age": 15,
-        "criteria": "course d’endurance",
-        "maxScore": 10,
-        "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
-        ],
-        "showScaleForm": true
-      },
-      {
-        "gender": "Girl",
-        "age": 16,
-        "criteria": "course d’endurance",
-        "maxScore": 10,
-        "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
-        ],
-        "showScaleForm": true
-      },
-      {
-        "gender": "Girl",
-        "age": 17,
-        "criteria": "course d’endurance",
-        "maxScore": 10,
-        "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
-        ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -759,19 +831,63 @@
         "criteria": "course d’endurance",
         "maxScore": 10,
         "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
+          {
+            "min": 0,
+            "max": 0,
+            "points": 10
+          },
+          {
+            "min": 1,
+            "max": 1,
+            "points": 9
+          },
+          {
+            "min": 2,
+            "max": 2,
+            "points": 8
+          },
+          {
+            "min": 3,
+            "max": 3,
+            "points": 7
+          },
+          {
+            "min": 4,
+            "max": 4,
+            "points": 6
+          },
+          {
+            "min": 5,
+            "max": 5,
+            "points": 5
+          },
+          {
+            "min": 6,
+            "max": 6,
+            "points": 4
+          },
+          {
+            "min": 7,
+            "max": 7,
+            "points": 3
+          },
+          {
+            "min": 8,
+            "max": 8,
+            "points": 2
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "points": 1
+          },
+          {
+            "min": 10,
+            "max": 10,
+            "points": 0
+          }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -779,19 +895,63 @@
         "criteria": "course d’endurance",
         "maxScore": 10,
         "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
+          {
+            "min": 0,
+            "max": 0,
+            "points": 10
+          },
+          {
+            "min": 1,
+            "max": 1,
+            "points": 9
+          },
+          {
+            "min": 2,
+            "max": 2,
+            "points": 8
+          },
+          {
+            "min": 3,
+            "max": 3,
+            "points": 7
+          },
+          {
+            "min": 4,
+            "max": 4,
+            "points": 6
+          },
+          {
+            "min": 5,
+            "max": 5,
+            "points": 5
+          },
+          {
+            "min": 6,
+            "max": 6,
+            "points": 4
+          },
+          {
+            "min": 7,
+            "max": 7,
+            "points": 3
+          },
+          {
+            "min": 8,
+            "max": 8,
+            "points": 2
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "points": 1
+          },
+          {
+            "min": 10,
+            "max": 10,
+            "points": 0
+          }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -799,82 +959,66 @@
         "criteria": "course d’endurance",
         "maxScore": 10,
         "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
+          {
+            "min": 0,
+            "max": 0,
+            "points": 10
+          },
+          {
+            "min": 1,
+            "max": 1,
+            "points": 9
+          },
+          {
+            "min": 2,
+            "max": 2,
+            "points": 8
+          },
+          {
+            "min": 3,
+            "max": 3,
+            "points": 7
+          },
+          {
+            "min": 4,
+            "max": 4,
+            "points": 6
+          },
+          {
+            "min": 5,
+            "max": 5,
+            "points": 5
+          },
+          {
+            "min": 6,
+            "max": 6,
+            "points": 4
+          },
+          {
+            "min": 7,
+            "max": 7,
+            "points": 3
+          },
+          {
+            "min": 8,
+            "max": 8,
+            "points": 2
+          },
+          {
+            "min": 9,
+            "max": 9,
+            "points": 1
+          },
+          {
+            "min": 10,
+            "max": 10,
+            "points": 0
+          }
         ],
-        "showScaleForm": true
-      },
-      {
-        "gender": "Boy",
-        "age": 15,
-        "criteria": "course d’endurance",
-        "maxScore": 10,
-        "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
-        ],
-        "showScaleForm": true
-      },
-      {
-        "gender": "Boy",
-        "age": 16,
-        "criteria": "course d’endurance",
-        "maxScore": 10,
-        "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
-        ],
-        "showScaleForm": true
-      },
-      {
-        "gender": "Boy",
-        "age": 17,
-        "criteria": "course d’endurance",
-        "maxScore": 10,
-        "scale": [
-          { "min": 0, "max": 0, "points": 10 },
-          { "min": 1, "max": 1, "points": 9 },
-          { "min": 2, "max": 2, "points": 8 },
-          { "min": 3, "max": 3, "points": 7 },
-          { "min": 4, "max": 4, "points": 6 },
-          { "min": 5, "max": 5, "points": 5 },
-          { "min": 6, "max": 6, "points": 4 },
-          { "min": 7, "max": 7, "points": 3 },
-          { "min": 8, "max": 8, "points": 2 },
-          { "min": 9, "max": 9, "points": 1 },
-          { "min": 10, "max": 10, "points": 0 }
-        ],
-        "showScaleForm": true
+        "showScaleForm": false
       }
     ],
-    "showCriteriaForm": true
+    "showCriteriaForm": false
   },
   {
     "name": "Redressement Assis",
@@ -906,7 +1050,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -935,7 +1079,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -964,7 +1108,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -993,7 +1137,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1022,7 +1166,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1051,7 +1195,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1080,7 +1224,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1109,7 +1253,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1138,7 +1282,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1167,7 +1311,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1196,7 +1340,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1225,10 +1369,10 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       }
     ],
-    "showCriteriaForm": true
+    "showCriteriaForm": false
   },
   {
     "name": "Saut En Longeur Sans Élan",
@@ -1260,7 +1404,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1289,7 +1433,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1318,7 +1462,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1347,7 +1491,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1376,7 +1520,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1405,7 +1549,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1434,7 +1578,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1463,7 +1607,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1492,7 +1636,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1521,7 +1665,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1550,7 +1694,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1579,10 +1723,10 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       }
     ],
-    "showCriteriaForm": true
+    "showCriteriaForm": false
   },
   {
     "name": "Extension  Des Bras",
@@ -1614,7 +1758,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1643,7 +1787,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1672,7 +1816,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1701,7 +1845,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1730,7 +1874,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1759,7 +1903,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1788,7 +1932,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1817,7 +1961,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1846,7 +1990,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1875,7 +2019,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1904,7 +2048,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -1933,10 +2077,10 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       }
     ],
-    "showCriteriaForm": true
+    "showCriteriaForm": false
   },
   {
     "name": "Course de 50m",
@@ -1968,7 +2112,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -1997,7 +2141,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -2026,7 +2170,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -2055,7 +2199,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -2084,7 +2228,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -2113,7 +2257,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -2142,7 +2286,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -2171,7 +2315,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -2200,7 +2344,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -2229,7 +2373,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Boy",
@@ -2258,7 +2402,7 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
       },
       {
         "gender": "Girl",
@@ -2287,9 +2431,462 @@
             "points": 10
           }
         ],
-        "showScaleForm": true
+        "showScaleForm": false
+      }
+    ],
+    "showCriteriaForm": false
+  },
+  {
+    "name": "Test navette",
+    "criteria": [
+      {
+        "gender": "Boy",
+        "age": 12,
+        "criteria": "testnavette",
+        "maxScore": 13.7,
+        "scale": [
+          {
+            "min": 12.49,
+            "max": 13.7,
+            "points": 7,
+            "editing": false
+          },
+          {
+            "min": 11.99,
+            "max": 12.5,
+            "points": 8
+          },
+          {
+            "min": 11.69,
+            "max": 12,
+            "points": 9
+          },
+          {
+            "min": 0,
+            "max": 11.7,
+            "points": 10
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Girl",
+        "age": 12,
+        "criteria": "testnavette",
+        "maxScore": 14.3,
+        "scale": [
+          {
+            "min": 13.09,
+            "max": 14.3,
+            "points": 7,
+            "editing": false
+          },
+          {
+            "min": 12.49,
+            "max": 13.1,
+            "points": 8
+          },
+          {
+            "min": 12.19,
+            "max": 12.5,
+            "points": 9
+          },
+          {
+            "min": 0,
+            "max": 12.2,
+            "points": 10
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Boy",
+        "age": 13,
+        "criteria": "testnavette",
+        "maxScore": 13.5,
+        "scale": [
+          {
+            "min": 12.09,
+            "max": 13.5,
+            "points": 7
+          },
+          {
+            "min": 11.59,
+            "max": 12.1,
+            "points": 8
+          },
+          {
+            "min": 11.39,
+            "max": 11.6,
+            "points": 9,
+            "editing": false
+          },
+          {
+            "min": 0,
+            "max": 11.4,
+            "points": 10
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Girl",
+        "age": 13,
+        "criteria": "testnavette",
+        "maxScore": null,
+        "scale": [
+          {
+            "min": 12.99,
+            "max": 14.1,
+            "points": 7
+          },
+          {
+            "min": 12.29,
+            "max": 13,
+            "points": 8
+          },
+          {
+            "min": 11.89,
+            "max": 12.2,
+            "points": 9
+          },
+          {
+            "min": 0,
+            "max": 11.9,
+            "points": 10
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Boy",
+        "age": 14,
+        "criteria": "testnavette",
+        "maxScore": 12.7,
+        "scale": [
+          {
+            "min": 11.69,
+            "max": 12.7,
+            "points": 7
+          },
+          {
+            "min": 11.19,
+            "max": 11.7,
+            "points": 8
+          },
+          {
+            "min": 11.59,
+            "max": 12,
+            "points": 9
+          },
+          {
+            "min": 0,
+            "max": 11.6,
+            "points": 10
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Girl",
+        "age": 14,
+        "criteria": "testnavette",
+        "maxScore": 14,
+        "scale": [
+          {
+            "min": 12.69,
+            "max": 14,
+            "points": 7
+          },
+          {
+            "min": 11.99,
+            "max": 12.7,
+            "points": 8
+          },
+          {
+            "min": 11.59,
+            "max": 12,
+            "points": 9
+          },
+          {
+            "min": 0,
+            "max": 11.6,
+            "points": 10
+          }
+        ],
+        "showScaleForm": false
+      }
+    ],
+    "showCriteriaForm": false
+  },
+  {
+    "name": "Course d'endurence Sec 3, 4, 5",
+    "criteria": [
+      {
+        "gender": "Girl",
+        "age": 14,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          {
+            "min": 0,
+            "max": 540000,
+            "points": 10,
+            "isTime": true
+          },
+          {
+            "min": 540001,
+            "max": 570000,
+            "points": 9,
+            "isTime": true
+          },
+          {
+            "min": 570001,
+            "max": 600000,
+            "points": 8,
+            "isTime": true
+          },
+          {
+            "min": 600001,
+            "max": 630000,
+            "points": 7,
+            "isTime": true
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Boy",
+        "age": 14,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          {
+            "min": 0,
+            "max": 480000,
+            "points": 10,
+            "isTime": true
+          },
+          {
+            "min": 480001,
+            "max": 510000,
+            "points": 9,
+            "isTime": true
+          },
+          {
+            "min": 510001,
+            "max": 540000,
+            "points": 8,
+            "isTime": true
+          },
+          {
+            "min": 540001,
+            "max": 570000,
+            "points": 7,
+            "isTime": true
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Girl",
+        "age": 15,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          {
+            "min": 0,
+            "max": 510000,
+            "points": 10,
+            "isTime": true
+          },
+          {
+            "min": 510001,
+            "max": 540000,
+            "points": 9,
+            "isTime": true
+          },
+          {
+            "min": 540001,
+            "max": 570000,
+            "points": 8,
+            "isTime": true
+          },
+          {
+            "min": 570001,
+            "max": 600000,
+            "points": 7,
+            "isTime": true
+          }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Boy",
+        "age": 15,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          {
+            "min": 0,
+            "max": 450000,
+            "points": 10,
+            "isTime": true
+          },
+          {
+            "min": 450001,
+            "max": 480000,
+            "points": 9,
+            "isTime": true
+          },
+          {
+            "min": 480001,
+            "max": 510000,
+            "points": 8,
+            "isTime": true
+          },
+          {
+            "min": 510001,
+            "max": 540000,
+            "points": 7,
+            "isTime": true
+          }
+        ],
+        "showScaleForm": false
       }
     ],
     "showCriteriaForm": true
+  },
+  {
+    "gender": "Girl",
+    "age": 16,
+    "criteria": "time",
+    "maxScore": 100,
+    "scale": [
+      {
+        "min": 0,
+        "max": 480000,
+        "points": 10,
+        "isTime": true
+      },
+      {
+        "min": 480001,
+        "max": 510000,
+        "points": 9,
+        "isTime": true
+      },
+      {
+        "min": 510001,
+        "max": 540000,
+        "points": 8,
+        "isTime": true
+      },
+      {
+        "min": 540001,
+        "max": 570000,
+        "points": 7,
+        "isTime": true
+      }
+    ],
+    "showScaleForm": false
+  },
+  {
+    "gender": "Boy",
+    "age": 16,
+    "criteria": "time",
+    "maxScore": 100,
+    "scale": [
+      {
+        "min": 0,
+        "max": 420000,
+        "points": 10,
+        "isTime": true
+      },
+      {
+        "min": 420001,
+        "max": 450000,
+        "points": 9,
+        "isTime": true
+      },
+      {
+        "min": 450001,
+        "max": 480000,
+        "points": 8,
+        "isTime": true
+      },
+      {
+        "min": 480001,
+        "max": 510000,
+        "points": 7,
+        "isTime": true
+      }
+    ],
+    "showScaleForm": false
+  },
+  {
+    "gender": "Girl",
+    "age": 17,
+    "criteria": "time",
+    "maxScore": 100,
+    "scale": [
+      {
+        "min": 0,
+        "max": 450000,
+        "points": 10,
+        "isTime": true
+      },
+      {
+        "min": 450001,
+        "max": 480000,
+        "points": 9,
+        "isTime": true
+      },
+      {
+        "min": 480001,
+        "max": 510000,
+        "points": 8,
+        "isTime": true
+      },
+      {
+        "min": 510001,
+        "max": 540000,
+        "points": 7,
+        "isTime": true
+      }
+    ],
+    "showScaleForm": false
+  },
+  {
+    "gender": "Boy",
+    "age": 17,
+    "criteria": "time",
+    "maxScore": 100,
+    "scale": [
+      {
+        "min": 0,
+        "max": 390000,
+        "points": 10,
+        "isTime": true
+      },
+      {
+        "min": 390001,
+        "max": 420000,
+        "points": 9,
+        "isTime": true
+      },
+      {
+        "min": 420001,
+        "max": 450000,
+        "points": 8,
+        "isTime": true
+      },
+      {
+        "min": 450001,
+        "max": 480000,
+        "points": 7,
+        "isTime": true
+      }
+    ],
+    "showScaleForm": false
   }
 ]
