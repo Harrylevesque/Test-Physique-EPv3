@@ -5,18 +5,21 @@ let userGender = '';
 let userAge = '';
 
 // --- Popup fonctionnalités à venir ---
-const openFeaturesBtn = document.getElementById('open-features-btn');
 const featuresModal = document.getElementById('features-modal');
 const closeFeaturesModal = document.getElementById('close-features-modal');
 const featuresIcon = document.createElement('div');
-featuresIcon.id = 'features-fab';
-featuresIcon.title = 'Fonctionnalités à venir';
-featuresIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" fill="#007bff"/><text x="12" y="17" text-anchor="middle" font-size="14" fill="#fff" font-family="Arial">★</text></svg>';
+featuresIcon.id = 'menu-fab';
+featuresIcon.title = 'Menu';
+featuresIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="2" rx="1" fill="#007bff"/><rect x="3" y="11" width="18" height="2" rx="1" fill="#007bff"/><rect x="3" y="16" width="18" height="2" rx="1" fill="#007bff"/></svg>';
 document.body.appendChild(featuresIcon);
 
-openFeaturesBtn.onclick = function() {
-    featuresModal.style.display = 'block';
+featuresIcon.onclick = function() {
+    const menu = document.querySelector('.navbar-fixed-bottom');
+    if (menu) {
+        menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'flex' : 'none';
+    }
 };
+
 closeFeaturesModal.onclick = function() {
     featuresModal.style.display = 'none';
 };
@@ -24,9 +27,6 @@ window.onclick = function(event) {
     if (event.target === featuresModal) {
         featuresModal.style.display = 'none';
     }
-};
-featuresIcon.onclick = function() {
-    featuresModal.style.display = 'block';
 };
 // Ouvre la popup automatiquement au chargement
 window.addEventListener('DOMContentLoaded', function() {
@@ -76,8 +76,7 @@ userGradeSelect.onchange = function() {
     if (grade === '1') ages = [12, 13];
     else if (grade === '2') ages = [13, 14];
     else if (grade === '3') ages = [14, 15];
-    else if (grade === '4') ages = [15, 16];
-    else if (grade === '5') ages = [16, 17];
+    else if (grade === '4' || grade === '5') ages = [15, 16, 17];
     userAgeSelect.innerHTML = '<option value="">Sélectionner l\'âge</option>' + ages.map(a => `<option value="${a}">${a}</option>`).join('');
 };
 
