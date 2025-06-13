@@ -131,7 +131,9 @@ function showGradingInputs() {
         activityHtml += `<strong>${act.name}</strong> <span style="color:#888;font-size:0.95em;">[${crit.criteria}]</span><br>Max : ${crit.maxScore}<br>`;
         activityHtml += '<div class="block-list">';
         crit.scale.forEach((block, bidx) => {
-            activityHtml += `<button type="button" class="block-btn" data-aidx="${aidx}" data-bidx="${bidx}" style="margin:4px;width:100%;">Score ${block.min} - ${block.max} → ${block.points} pts</button>`;
+            let minDisplay = block.isTime ? msToTime(block.min) : block.min;
+            let maxDisplay = block.isTime ? msToTime(block.max) : block.max;
+            activityHtml += `<button type="button" class="block-btn" data-aidx="${aidx}" data-bidx="${bidx}" style="margin:4px;width:100%;">Score ${minDisplay} - ${maxDisplay} → ${block.points} pts</button>`;
         });
         activityHtml += `<span id="block-result-${aidx}" style="margin-left:10px;color:#007bff;"></span>`;
         activityHtml += `<div id="slider-container-${aidx}" style="margin-top:10px;display:none;"></div>`;
@@ -165,17 +167,39 @@ function showGradingInputs() {
                 // Show slider
                 const sliderContainer = document.getElementById(`slider-container-${aidx}`);
                 sliderContainer.style.display = 'block';
-                sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <input type="number" id="slider-input-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:70px;" autocomplete="off"></label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="0.1" style="width:200px;margin-left:10px;">`;
-                const slider = document.getElementById(`slider-${aidx}`);
-                const input = document.getElementById(`slider-input-${aidx}`);
-                input.removeAttribute('readonly');
-                input.disabled = false;
-                slider.oninput = function() {
-                    input.value = slider.value;
-                };
-                input.oninput = function() {
-                    slider.value = input.value;
-                };
+                if (block.isTime) {
+                    // Time slider: ms, step 1, display mm:ss:xxx
+                    sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <input type="text" id="slider-input-${aidx}" value="${msToTime(block.min)}" style="width:90px;" autocomplete="off" pattern="^\\d{1,2}:\\d{2}:\\d{3}$"></label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="1" style="width:200px;margin-left:10px;">`;
+                    const slider = document.getElementById(`slider-${aidx}`);
+                    const input = document.getElementById(`slider-input-${aidx}`);
+                    slider.oninput = function() {
+                        input.value = msToTime(slider.valueAsNumber);
+                    };
+                    input.oninput = function() {
+                        const timeRegex = /^\d{1,2}:\d{2}:\d{3}$/;
+                        if (timeRegex.test(input.value)) {
+                            slider.value = timeToMs(input.value);
+                        }
+                    };
+                } else {
+                    // Detect if this activity's scale uses decimals
+                    let usesDecimals = crit.scale.some(b => {
+                        return (b.min % 1 !== 0) || (b.max % 1 !== 0) || (b.points % 1 !== 0);
+                    });
+                    let sliderStep = usesDecimals ? 0.01 : 1;
+                    let sliderFormat = usesDecimals ? (v => Number(v).toFixed(2)) : (v => parseInt(v, 10));
+                    sliderContainer.innerHTML = `<label for="slider-${aidx}">Score précis : <input type="number" id="slider-input-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="${sliderStep}" style="width:70px;" autocomplete="off"></label><input type="range" id="slider-${aidx}" min="${block.min}" max="${block.max}" value="${block.min}" step="${sliderStep}" style="width:200px;margin-left:10px;">`;
+                    const slider = document.getElementById(`slider-${aidx}`);
+                    const input = document.getElementById(`slider-input-${aidx}`);
+                    input.removeAttribute('readonly');
+                    input.disabled = false;
+                    slider.oninput = function() {
+                        input.value = sliderFormat(slider.value);
+                    };
+                    input.oninput = function() {
+                        slider.value = input.value;
+                    };
+                }
             };
         });
         // Navigation logic
@@ -304,3 +328,15 @@ fetch('scr/fullversion.json')
     .catch(() => {
         // Optionnel : message d'erreur si le fichier n'est pas trouvé
     });
+// Helper: ms to mm:ss:xxx
+function msToTime(ms) {
+    const min = Math.floor(ms / 60000);
+    const sec = Math.floor((ms % 60000) / 1000);
+    const mil = ms % 1000;
+    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}:${mil.toString().padStart(3, '0')}`;
+}
+// Helper: mm:ss:xxx to ms
+function timeToMs(str) {
+    const [min, sec, ms] = str.split(':').map(Number);
+    return min * 60000 + sec * 1000 + ms;
+}

@@ -2628,30 +2628,10 @@
         "criteria": "time",
         "maxScore": 100,
         "scale": [
-          {
-            "min": 0,
-            "max": 540000,
-            "points": 10,
-            "isTime": true
-          },
-          {
-            "min": 540001,
-            "max": 570000,
-            "points": 9,
-            "isTime": true
-          },
-          {
-            "min": 570001,
-            "max": 600000,
-            "points": 8,
-            "isTime": true
-          },
-          {
-            "min": 600001,
-            "max": 630000,
-            "points": 7,
-            "isTime": true
-          }
+          { "min": 0, "max": 540000, "points": 10, "isTime": true },
+          { "min": 540001, "max": 570000, "points": 9, "isTime": true },
+          { "min": 570001, "max": 600000, "points": 8, "isTime": true },
+          { "min": 600001, "max": 630000, "points": 7, "isTime": true }
         ],
         "showScaleForm": false
       },
@@ -2661,30 +2641,10 @@
         "criteria": "time",
         "maxScore": 100,
         "scale": [
-          {
-            "min": 0,
-            "max": 480000,
-            "points": 10,
-            "isTime": true
-          },
-          {
-            "min": 480001,
-            "max": 510000,
-            "points": 9,
-            "isTime": true
-          },
-          {
-            "min": 510001,
-            "max": 540000,
-            "points": 8,
-            "isTime": true
-          },
-          {
-            "min": 540001,
-            "max": 570000,
-            "points": 7,
-            "isTime": true
-          }
+          { "min": 0, "max": 480000, "points": 10, "isTime": true },
+          { "min": 480001, "max": 510000, "points": 9, "isTime": true },
+          { "min": 510001, "max": 540000, "points": 8, "isTime": true },
+          { "min": 540001, "max": 570000, "points": 7, "isTime": true }
         ],
         "showScaleForm": false
       },
@@ -2694,30 +2654,10 @@
         "criteria": "time",
         "maxScore": 100,
         "scale": [
-          {
-            "min": 0,
-            "max": 510000,
-            "points": 10,
-            "isTime": true
-          },
-          {
-            "min": 510001,
-            "max": 540000,
-            "points": 9,
-            "isTime": true
-          },
-          {
-            "min": 540001,
-            "max": 570000,
-            "points": 8,
-            "isTime": true
-          },
-          {
-            "min": 570001,
-            "max": 600000,
-            "points": 7,
-            "isTime": true
-          }
+          { "min": 0, "max": 510000, "points": 10, "isTime": true },
+          { "min": 510001, "max": 540000, "points": 9, "isTime": true },
+          { "min": 540001, "max": 570000, "points": 8, "isTime": true },
+          { "min": 570001, "max": 600000, "points": 7, "isTime": true }
         ],
         "showScaleForm": false
       },
@@ -2727,166 +2667,67 @@
         "criteria": "time",
         "maxScore": 100,
         "scale": [
-          {
-            "min": 0,
-            "max": 450000,
-            "points": 10,
-            "isTime": true
-          },
-          {
-            "min": 450001,
-            "max": 480000,
-            "points": 9,
-            "isTime": true
-          },
-          {
-            "min": 480001,
-            "max": 510000,
-            "points": 8,
-            "isTime": true
-          },
-          {
-            "min": 510001,
-            "max": 540000,
-            "points": 7,
-            "isTime": true
-          }
+          { "min": 0, "max": 450000, "points": 10, "isTime": true },
+          { "min": 450001, "max": 480000, "points": 9, "isTime": true },
+          { "min": 480001, "max": 510000, "points": 8, "isTime": true },
+          { "min": 510001, "max": 540000, "points": 7, "isTime": true }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Girl",
+        "age": 16,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          { "min": 0, "max": 480000, "points": 10, "isTime": true },
+          { "min": 480001, "max": 510000, "points": 9, "isTime": true },
+          { "min": 510001, "max": 540000, "points": 8, "isTime": true },
+          { "min": 540001, "max": 570000, "points": 7, "isTime": true }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Boy",
+        "age": 16,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          { "min": 0, "max": 420000, "points": 10, "isTime": true },
+          { "min": 420001, "max": 450000, "points": 9, "isTime": true },
+          { "min": 450001, "max": 480000, "points": 8, "isTime": true },
+          { "min": 480001, "max": 510000, "points": 7, "isTime": true }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Girl",
+        "age": 17,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          { "min": 0, "max": 450000, "points": 10, "isTime": true },
+          { "min": 450001, "max": 480000, "points": 9, "isTime": true },
+          { "min": 480001, "max": 510000, "points": 8, "isTime": true },
+          { "min": 510001, "max": 540000, "points": 7, "isTime": true }
+        ],
+        "showScaleForm": false
+      },
+      {
+        "gender": "Boy",
+        "age": 17,
+        "criteria": "time",
+        "maxScore": 100,
+        "scale": [
+          { "min": 0, "max": 390000, "points": 10, "isTime": true },
+          { "min": 390001, "max": 420000, "points": 9, "isTime": true },
+          { "min": 420001, "max": 450000, "points": 8, "isTime": true },
+          { "min": 450001, "max": 480000, "points": 7, "isTime": true }
         ],
         "showScaleForm": false
       }
     ],
     "showCriteriaForm": true
-  },
-  {
-    "gender": "Girl",
-    "age": 16,
-    "criteria": "time",
-    "maxScore": 100,
-    "scale": [
-      {
-        "min": 0,
-        "max": 480000,
-        "points": 10,
-        "isTime": true
-      },
-      {
-        "min": 480001,
-        "max": 510000,
-        "points": 9,
-        "isTime": true
-      },
-      {
-        "min": 510001,
-        "max": 540000,
-        "points": 8,
-        "isTime": true
-      },
-      {
-        "min": 540001,
-        "max": 570000,
-        "points": 7,
-        "isTime": true
-      }
-    ],
-    "showScaleForm": false
-  },
-  {
-    "gender": "Boy",
-    "age": 16,
-    "criteria": "time",
-    "maxScore": 100,
-    "scale": [
-      {
-        "min": 0,
-        "max": 420000,
-        "points": 10,
-        "isTime": true
-      },
-      {
-        "min": 420001,
-        "max": 450000,
-        "points": 9,
-        "isTime": true
-      },
-      {
-        "min": 450001,
-        "max": 480000,
-        "points": 8,
-        "isTime": true
-      },
-      {
-        "min": 480001,
-        "max": 510000,
-        "points": 7,
-        "isTime": true
-      }
-    ],
-    "showScaleForm": false
-  },
-  {
-    "gender": "Girl",
-    "age": 17,
-    "criteria": "time",
-    "maxScore": 100,
-    "scale": [
-      {
-        "min": 0,
-        "max": 450000,
-        "points": 10,
-        "isTime": true
-      },
-      {
-        "min": 450001,
-        "max": 480000,
-        "points": 9,
-        "isTime": true
-      },
-      {
-        "min": 480001,
-        "max": 510000,
-        "points": 8,
-        "isTime": true
-      },
-      {
-        "min": 510001,
-        "max": 540000,
-        "points": 7,
-        "isTime": true
-      }
-    ],
-    "showScaleForm": false
-  },
-  {
-    "gender": "Boy",
-    "age": 17,
-    "criteria": "time",
-    "maxScore": 100,
-    "scale": [
-      {
-        "min": 0,
-        "max": 390000,
-        "points": 10,
-        "isTime": true
-      },
-      {
-        "min": 390001,
-        "max": 420000,
-        "points": 9,
-        "isTime": true
-      },
-      {
-        "min": 420001,
-        "max": 450000,
-        "points": 8,
-        "isTime": true
-      },
-      {
-        "min": 450001,
-        "max": 480000,
-        "points": 7,
-        "isTime": true
-      }
-    ],
-    "showScaleForm": false
   }
+
 ]

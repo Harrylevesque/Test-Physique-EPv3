@@ -10,8 +10,9 @@ function renderActivities() {
         div.className = 'activity';
         div.innerHTML = `
             <div class="activity-header">
-                <strong>${activity.name}</strong>
+                <strong>${activity.editing ? `<input type='text' id='edit-activity-name-${idx}' value='${activity.name}' style='width:180px;'>` : activity.name}</strong>
                 <button class="remove-btn" onclick="removeActivity(${idx})">Supprimer</button>
+                <button onclick="toggleEditActivity(${idx})" style="margin-left:8px;">${activity.editing ? 'Enregistrer' : 'Renommer'}</button>
             </div>
             <button onclick="toggleCriteriaForm(${idx})" style="margin:10px 0;">${activity.showCriteriaForm ? 'Cacher' : 'Ajouter/Modifier Critères'}</button>
             <div id="criteria-form-${idx}" style="display:${activity.showCriteriaForm ? 'block' : 'none'};margin-bottom:10px;">
@@ -29,13 +30,25 @@ function renderActivities() {
             <div class="event-list">
                 ${activity.criteria.map((crit, cidx) => `
                     <div class="event">
-                        <strong>${crit.criteria} (${crit.gender === 'Boy' ? 'Garçon' : 'Fille'}, Âge ${crit.age})</strong> <span style="color:#888;font-size:0.95em;">[Max: ${crit.maxScore}]</span>
+                        <strong>${crit.editing ? `<input type='text' id='edit-criteria-${idx}-${cidx}' value='${crit.criteria}' style='width:120px;'>` : crit.criteria} (${crit.gender === 'Boy' ? 'Garçon' : 'Fille'}, Âge ${crit.age})</strong> <span style="color:#888;font-size:0.95em;">[Max: ${crit.maxScore}]</span>
                         <button class="remove-btn" onclick="removeCriteria(${idx},${cidx})">Supprimer</button>
+                        <button onclick="toggleEditCriteria(${idx},${cidx})" style="margin-left:8px;">${crit.editing ? 'Enregistrer' : 'Renommer'}</button>
                         <button onclick="toggleScaleForm(${idx},${cidx})" style="margin-left:8px;">${crit.showScaleForm ? 'Cacher' : 'Ajouter/Modifier Blocs'}</button>
                         <div id="scale-form-${idx}-${cidx}" style="display:${crit.showScaleForm ? 'block' : 'none'};margin-top:6px;">
                             <form onsubmit="addScaleBlock(event,${idx},${cidx})" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-                                <input type="text" name="min" placeholder="Score min" required style="width:70px;">
-                                <input type="text" name="max" placeholder="Score max" required style="width:70px;">
+                                ${crit.criteria.trim().toLowerCase() === 'time' ? `
+                                    <span>Min:</span>
+                                    <input type="number" name="min_min" min="0" max="59" placeholder="mm" required style="width:45px;">
+                                    <input type="number" name="min_sec" min="0" max="59" placeholder="ss" required style="width:45px;">
+                                    <input type="number" name="min_ms" min="0" max="999" placeholder="xxx" required style="width:55px;">
+                                    <span>Max:</span>
+                                    <input type="number" name="max_min" min="0" max="59" placeholder="mm" required style="width:45px;">
+                                    <input type="number" name="max_sec" min="0" max="59" placeholder="ss" required style="width:45px;">
+                                    <input type="number" name="max_ms" min="0" max="999" placeholder="xxx" required style="width:55px;">
+                                ` : `
+                                    <input type="text" name="min" placeholder="Score min" required style="width:70px;">
+                                    <input type="text" name="max" placeholder="Score max" required style="width:70px;">
+                                `}
                                 <input type="text" name="points" placeholder="Points pour ce bloc" required style="width:110px;">
                                 <button type="submit">Ajouter Bloc</button>
                             </form>
@@ -43,8 +56,7 @@ function renderActivities() {
                         <div class="block-list">
                             ${crit.scale.map((block, bidx) => `
                                 <div class="block">
-                                    Score ${block.min} - ${block.max} → ${block.points} pts
-                                    <button class="remove-btn" onclick="removeScaleBlock(${idx},${cidx},${bidx})">Supprimer</button>
+                                    ${block.editing ? `${crit.criteria.trim().toLowerCase() === 'time' ? `Temps <input type='number' id='edit-block-min-min-${idx}-${cidx}-${bidx}' value='${Math.floor(block.min/60000)}' style='width:35px;'>:<input type='number' id='edit-block-min-sec-${idx}-${cidx}-${bidx}' value='${Math.floor((block.min%60000)/1000)}' style='width:35px;'>:<input type='number' id='edit-block-min-ms-${idx}-${cidx}-${bidx}' value='${block.min%1000}' style='width:45px;'> - <input type='number' id='edit-block-max-min-${idx}-${cidx}-${bidx}' value='${Math.floor(block.max/60000)}' style='width:35px;'>:<input type='number' id='edit-block-max-sec-${idx}-${cidx}-${bidx}' value='${Math.floor((block.max%60000)/1000)}' style='width:35px;'>:<input type='number' id='edit-block-max-ms-${idx}-${cidx}-${bidx}' value='${block.max%1000}' style='width:45px;'>` : `Score <input type='text' id='edit-block-min-${idx}-${cidx}-${bidx}' value='${block.min}' style='width:40px;'> - <input type='text' id='edit-block-max-${idx}-${cidx}-${bidx}' value='${block.max}' style='width:40px;'>`} → <input type='text' id='edit-block-points-${idx}-${cidx}-${bidx}' value='${block.points}' style='width:40px;'> pts <button onclick='saveEditBlock(${idx},${cidx},${bidx})'>Enregistrer</button>` : `${crit.criteria.trim().toLowerCase() === 'time' ? `Temps ${msToTime(block.min)} - ${msToTime(block.max)}` : `Score ${block.min} - ${block.max}`} → ${block.points} pts`} <button class="remove-btn" onclick="removeScaleBlock(${idx},${cidx},${bidx})">Supprimer</button> <button onclick="toggleEditBlock(${idx},${cidx},${bidx})">${block.editing ? 'Annuler' : 'Modifier'}</button>
                                 </div>
                             `).join('')}
                         </div>
@@ -109,11 +121,39 @@ function toggleScaleForm(aidx, cidx) {
 // Add grading scale block
 function addScaleBlock(e, aidx, cidx) {
     e.preventDefault();
-    const min = parseFloat(e.target.min.value.replace(',', '.'));
-    const max = parseFloat(e.target.max.value.replace(',', '.'));
-    const points = parseFloat(e.target.points.value.replace(',', '.'));
+    const crit = activities[aidx].criteria[cidx];
+    const isTime = crit.criteria.trim().toLowerCase() === 'time';
+    let min, max, points;
+    if (isTime) {
+        // Compose mm:ss:xxx from separate fields
+        const min_min = e.target.min_min.value.trim();
+        const min_sec = e.target.min_sec.value.trim();
+        const min_ms = e.target.min_ms.value.trim();
+        const max_min = e.target.max_min.value.trim();
+        const max_sec = e.target.max_sec.value.trim();
+        const max_ms = e.target.max_ms.value.trim();
+        // Validate all fields are present and numbers
+        if ([min_min, min_sec, min_ms, max_min, max_sec, max_ms].some(v => v === '' || isNaN(v))) {
+            alert('Veuillez remplir tous les champs de temps (mm:ss:xxx)');
+            return;
+        }
+        const minStr = `${min_min}:${min_sec.padStart(2, '0')}:${min_ms.padStart(3, '0')}`;
+        const maxStr = `${max_min}:${max_sec.padStart(2, '0')}:${max_ms.padStart(3, '0')}`;
+        const timeRegex = /^\d{1,2}:\d{2}:\d{3}$/;
+        if (!timeRegex.test(minStr) || !timeRegex.test(maxStr)) {
+            alert('Format du temps invalide. Utilisez mm:ss:xxx (minutes:secondes:millisecondes)');
+            return;
+        }
+        min = timeToMs(minStr);
+        max = timeToMs(maxStr);
+        points = parseFloat(e.target.points.value.replace(',', '.'));
+    } else {
+        min = parseFloat(e.target.min.value.replace(',', '.'));
+        max = parseFloat(e.target.max.value.replace(',', '.'));
+        points = parseFloat(e.target.points.value.replace(',', '.'));
+    }
     if (!isNaN(min) && !isNaN(max) && !isNaN(points)) {
-        activities[aidx].criteria[cidx].scale.push({ min, max, points });
+        activities[aidx].criteria[cidx].scale.push({ min, max, points, isTime });
         renderActivities();
     }
 }
@@ -158,3 +198,76 @@ uploadInput.onchange = function(e) {
 //test
 // Initial render
 renderActivities();
+
+function toggleEditActivity(idx) {
+    const activity = activities[idx];
+    if (activity.editing) {
+        const input = document.getElementById(`edit-activity-name-${idx}`);
+        if (input && input.value.trim()) activity.name = input.value.trim();
+    }
+    activity.editing = !activity.editing;
+    renderActivities();
+}
+
+function toggleEditCriteria(aidx, cidx) {
+    const crit = activities[aidx].criteria[cidx];
+    if (crit.editing) {
+        const input = document.getElementById(`edit-criteria-${aidx}-${cidx}`);
+        if (input && input.value.trim()) crit.criteria = input.value.trim();
+    }
+    crit.editing = !crit.editing;
+    renderActivities();
+}
+
+function toggleEditBlock(aidx, cidx, bidx) {
+    const block = activities[aidx].criteria[cidx].scale[bidx];
+    block.editing = !block.editing;
+    renderActivities();
+}
+function saveEditBlock(aidx, cidx, bidx) {
+    const block = activities[aidx].criteria[cidx].scale[bidx];
+    const crit = activities[aidx].criteria[cidx];
+    const isTime = crit.criteria.trim().toLowerCase() === 'time';
+    let min, max, points;
+    if (isTime) {
+        const minStr = document.getElementById(`edit-block-min-min-${aidx}-${cidx}-${bidx}`).value.trim();
+        const secStr = document.getElementById(`edit-block-min-sec-${aidx}-${cidx}-${bidx}`).value.trim();
+        const msStr = document.getElementById(`edit-block-min-ms-${aidx}-${cidx}-${bidx}`).value.trim();
+        const maxMinStr = document.getElementById(`edit-block-max-min-${aidx}-${cidx}-${bidx}`).value.trim();
+        const maxSecStr = document.getElementById(`edit-block-max-sec-${aidx}-${cidx}-${bidx}`).value.trim();
+        const maxMsStr = document.getElementById(`edit-block-max-ms-${aidx}-${cidx}-${bidx}`).value.trim();
+        const timeRegex = /^\d{1,2}:\d{2}:\d{3}$/;
+        if (!timeRegex.test(`${minStr}:${secStr}:${msStr}`) || !timeRegex.test(`${maxMinStr}:${maxSecStr}:${maxMsStr}`)) {
+            alert('Format du temps invalide. Utilisez mm:ss:xxx (minutes:secondes:millisecondes)');
+            return;
+        }
+        min = timeToMs(`${minStr}:${secStr}:${msStr}`);
+        max = timeToMs(`${maxMinStr}:${maxSecStr}:${maxMsStr}`);
+        points = parseFloat(document.getElementById(`edit-block-points-${aidx}-${cidx}-${bidx}`).value.replace(',', '.'));
+    } else {
+        min = parseFloat(document.getElementById(`edit-block-min-${aidx}-${cidx}-${bidx}`).value);
+        max = parseFloat(document.getElementById(`edit-block-max-${aidx}-${cidx}-${bidx}`).value);
+        points = parseFloat(document.getElementById(`edit-block-points-${aidx}-${cidx}-${bidx}`).value);
+    }
+    if (!isNaN(min) && !isNaN(max) && !isNaN(points)) {
+        block.min = min;
+        block.max = max;
+        block.points = points;
+    }
+    block.editing = false;
+    renderActivities();
+}
+
+// Helper: mm:ss:xxx to ms
+function timeToMs(str) {
+    const [min, sec, ms] = str.split(':').map(Number);
+    return min * 60000 + sec * 1000 + ms;
+}
+
+// Helper: ms to mm:ss:xxx
+function msToTime(ms) {
+    const min = Math.floor(ms / 60000);
+    const sec = Math.floor((ms % 60000) / 1000);
+    const mil = ms % 1000;
+    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}:${mil.toString().padStart(3, '0')}`;
+}
