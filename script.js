@@ -135,6 +135,7 @@ function showGradingInputs() {
         return;
     }
     let currentIndex = 0;
+    let alertHistory = [];
     function renderCurrentActivity() {
         const { act, aidx, crit } = activityList[currentIndex];
         let activityHtml = '';
@@ -223,6 +224,38 @@ function showGradingInputs() {
         }
         if (currentIndex < activityList.length - 1) {
             document.getElementById('next-btn').onclick = function() {
+                // Get current activity and selected block
+                const { act, aidx, crit } = activityList[currentIndex];
+                const selectedBidx = selectedBlocks[aidx];
+                let alertMsg = '';
+                if (selectedBidx !== undefined) {
+                    const block = crit.scale[selectedBidx];
+                    // Get precise score from input if available
+                    let preciseScore = '';
+                    const input = document.getElementById(`slider-input-${aidx}`);
+                    if (input) {
+                        preciseScore = input.value;
+                    }
+                    let minDisplay = block.isTime ? msToTime(block.min) : block.min;
+                    let maxDisplay = block.isTime ? msToTime(block.max) : block.max;
+                    alertMsg = `Activité : ${act.name}\nCritère : ${crit.criteria}\nScore précis : ${preciseScore}\nPlage : ${minDisplay} - ${maxDisplay}\nPoints : ${block.points}`;
+                } else {
+                    alertMsg = 'Aucun bloc sélectionné pour cette activité.';
+                }
+                // Store the alert for this activity
+                alertHistory[currentIndex] = alertMsg;
+                // Build a single alert with all activities so far
+                let allAlerts = [];
+                for (let i = 0; i <= currentIndex; i++) {
+                    allAlerts.push({
+                        name: activityList[i].act.name,
+                        criteria: activityList[i].crit.criteria,
+                        alert: alertHistory[i]
+                    });
+                }
+                // Save to localStorage for result.html
+                localStorage.setItem('epv3_activity_alerts', JSON.stringify(allAlerts));
+                // Do NOT show alert anymore
                 currentIndex++;
                 renderCurrentActivity();
             };
@@ -238,6 +271,11 @@ function showGradingInputs() {
                 },
                 activities: []
             };
+            // Get the alert info from localStorage (for detailed info)
+            let activityAlerts = [];
+            try {
+                activityAlerts = JSON.parse(localStorage.getItem('epv3_activity_alerts') || '[]');
+            } catch (e) { activityAlerts = []; }
             uploadedActivities.forEach((act, aidx) => {
                 let crit;
                 if (act.name === 'test léger-navette') {
@@ -253,33 +291,37 @@ function showGradingInputs() {
                 if (bidx !== undefined) {
                     const block = crit.scale[bidx];
                     total += block.points;
-                    let preciseScore;
-                    const sliderInput = document.getElementById(`slider-input-${aidx}`);
-                    if (sliderInput) {
-                        if (block.isTime) {
-                            // Only save if user changed from default
-                            if (sliderInput.value && sliderInput.value !== msToTime(block.min)) {
-                                preciseScore = sliderInput.value;
-                            } else {
-                                preciseScore = '';
-                            }
-                        } else {
-                            // Only save if user changed from default
-                            if (sliderInput.value !== '' && parseFloat(sliderInput.value) !== block.min) {
-                                preciseScore = parseFloat(sliderInput.value);
-                            } else {
-                                preciseScore = '';
-                            }
+                    // Always use the selected value from alert info if available
+                    let activityAlerts = [];
+                    try {
+                        activityAlerts = JSON.parse(localStorage.getItem('epv3_activity_alerts') || '[]');
+                    } catch (e) { activityAlerts = []; }
+                    let alertInfo = activityAlerts.find(a => a.name === act.name && a.criteria === crit.criteria);
+                    let alertText = alertInfo ? alertInfo.alert : '';
+                    // Try to extract the precise score from the alert text if present
+                    let preciseScore = '';
+                    if (alertText) {
+                        const match = alertText.match(/Score précis\s*:\s*([^\n]*)/);
+                        if (match && match[1] !== undefined) {
+                            preciseScore = match[1].trim();
                         }
-                    } else {
-                        preciseScore = '';
+                    }
+                    // Fallback to slider if not found
+                    if (!preciseScore) {
+                        const sliderInput = document.getElementById(`slider-input-${aidx}`);
+                        if (sliderInput) {
+                            preciseScore = sliderInput.value;
+                        } else {
+                            preciseScore = block.min;
+                        }
                     }
                     results.activities.push({
                         name: act.name,
                         criteria: crit.criteria,
                         blockRange: { min: block.min, max: block.max },
                         blockPoints: block.points,
-                        preciseScore: preciseScore
+                        preciseScore: preciseScore,
+                        alert: alertText
                     });
                 }
             });
@@ -290,6 +332,7 @@ function showGradingInputs() {
             results.totalPossible = totalPossible;
             results.percent = percent;
             results.code = (userGender === 'Boy' ? 'G' : (userGender === 'Girl' ? 'F' : 'X')) + userGradeSelect.value + userAge;
+            // Save the detailed activity info in the main JSON
             localStorage.setItem('epv3_full_breakdown', JSON.stringify(results));
             window.location.href = 'result.html';
         };

@@ -36,6 +36,14 @@
       <button class="menu-fab-btn" id="menu-correction-btn" title="Correction">
         <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
       </button>
+      <button class="menu-fab-btn" id="menu-distribution-btn" title="Distribution">
+        <!-- Graph/Chart icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="12" width="4" height="8" rx="1.5"/>
+          <rect x="9" y="8" width="4" height="12" rx="1.5"/>
+          <rect x="15" y="4" width="4" height="16" rx="1.5"/>
+        </svg>
+      </button>
       <button class="menu-fab-btn" id="menu-close-btn" title="Fermer le menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -51,7 +59,7 @@ document.getElementById('upload-zip').addEventListener('change', async function(
     studentsListDiv.innerHTML = ''; // Clear previous results
 
     // Table structure
-    let tableHtml = `<table border="1" cellpadding="5" style="border-collapse:collapse; width:auto; text-align:left; min-width: 100%;">
+    let tableHtml = `<table border="1" cellpadding="5" style="border-collapse:collapse; width:auto; text-align:left; min-width: 100%">
         <thead>
             <tr>
                 <th style="padding:4px; white-space:nowrap; background-color: #f2f2f2;">Nom du fichier</th>
@@ -190,6 +198,7 @@ const menuFabButtons = document.getElementById('menuFabButtons');
 const menuIndexBtn = document.getElementById('menu-index-btn');
 const menuCreationBtn = document.getElementById('menu-creation-btn');
 const menuCorrectionBtn = document.getElementById('menu-correction-btn');
+const menuDistributionBtn = document.getElementById('menu-distribution-btn');
 const menuCloseBtn = document.getElementById('menu-close-btn');
 menuFabToggle.onclick = function() {
   menuFabButtons.style.display = 'flex';
@@ -207,6 +216,9 @@ menuCreationBtn.onclick = function() {
 };
 menuCorrectionBtn.onclick = function() {
   window.location.href = 'correction.html';
+};
+menuDistributionBtn.onclick = function() {
+  window.location.href = 'distribution.html';
 };
 </script>
 </body>
