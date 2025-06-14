@@ -230,19 +230,27 @@ function saveEditBlock(aidx, cidx, bidx) {
     const isTime = crit.criteria.trim().toLowerCase() === 'time';
     let min, max, points;
     if (isTime) {
-        const minStr = document.getElementById(`edit-block-min-min-${aidx}-${cidx}-${bidx}`).value.trim();
-        const secStr = document.getElementById(`edit-block-min-sec-${aidx}-${cidx}-${bidx}`).value.trim();
-        const msStr = document.getElementById(`edit-block-min-ms-${aidx}-${cidx}-${bidx}`).value.trim();
-        const maxMinStr = document.getElementById(`edit-block-max-min-${aidx}-${cidx}-${bidx}`).value.trim();
-        const maxSecStr = document.getElementById(`edit-block-max-sec-${aidx}-${cidx}-${bidx}`).value.trim();
-        const maxMsStr = document.getElementById(`edit-block-max-ms-${aidx}-${cidx}-${bidx}`).value.trim();
+        // Get values and pad as needed
+        let minMin = document.getElementById(`edit-block-min-min-${aidx}-${cidx}-${bidx}`).value.trim();
+        let minSec = document.getElementById(`edit-block-min-sec-${aidx}-${cidx}-${bidx}`).value.trim();
+        let minMs = document.getElementById(`edit-block-min-ms-${aidx}-${cidx}-${bidx}`).value.trim();
+        let maxMin = document.getElementById(`edit-block-max-min-${aidx}-${cidx}-${bidx}`).value.trim();
+        let maxSec = document.getElementById(`edit-block-max-sec-${aidx}-${cidx}-${bidx}`).value.trim();
+        let maxMs = document.getElementById(`edit-block-max-ms-${aidx}-${cidx}-${bidx}`).value.trim();
+        // Pad values
+        minSec = minSec.padStart(2, '0');
+        minMs = minMs.padStart(3, '0');
+        maxSec = maxSec.padStart(2, '0');
+        maxMs = maxMs.padStart(3, '0');
+        const minStr = `${minMin}:${minSec}:${minMs}`;
+        const maxStr = `${maxMin}:${maxSec}:${maxMs}`;
         const timeRegex = /^\d{1,2}:\d{2}:\d{3}$/;
-        if (!timeRegex.test(`${minStr}:${secStr}:${msStr}`) || !timeRegex.test(`${maxMinStr}:${maxSecStr}:${maxMsStr}`)) {
+        if (!timeRegex.test(minStr) || !timeRegex.test(maxStr)) {
             alert('Format du temps invalide. Utilisez mm:ss:xxx (minutes:secondes:millisecondes)');
             return;
         }
-        min = timeToMs(`${minStr}:${secStr}:${msStr}`);
-        max = timeToMs(`${maxMinStr}:${maxSecStr}:${maxMsStr}`);
+        min = timeToMs(minStr);
+        max = timeToMs(maxStr);
         points = parseFloat(document.getElementById(`edit-block-points-${aidx}-${cidx}-${bidx}`).value.replace(',', '.'));
     } else {
         min = parseFloat(document.getElementById(`edit-block-min-${aidx}-${cidx}-${bidx}`).value);

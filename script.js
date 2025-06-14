@@ -76,7 +76,8 @@ userGradeSelect.onchange = function() {
     if (grade === '1') ages = [12, 13];
     else if (grade === '2') ages = [13, 14];
     else if (grade === '3') ages = [14, 15];
-    else if (grade === '4' || grade === '5') ages = [15, 16, 17];
+    else if (grade === '4') ages = [15, 16];
+    else if (grade === '5') ages = [16, 17];
     userAgeSelect.innerHTML = '<option value="">Sélectionner l\'âge</option>' + ages.map(a => `<option value="${a}">${a}</option>`).join('');
 };
 
@@ -101,11 +102,22 @@ function showGradingInputs() {
     // Prepare a list of activities to show one by one
     let activityList = [];
     uploadedActivities.forEach((act, aidx) => {
-        if ((act.name === 'test léger-navette' || act.name.toLowerCase().includes('navette')) && (userGradeSelect.value === '1' || userGradeSelect.value === '2')) {
+        // Only hide "test léger-navette" for sec 1 and 2 (exact match, case-insensitive, trimmed)
+        const actNameTrimmed = act.name.trim().toLowerCase();
+        if (actNameTrimmed === 'test léger-navette' && (userGradeSelect.value === '1' || userGradeSelect.value === '2')) {
+            return;
+        }
+        // Hide "Course d'endurence Sec 3, 4, 5" for grades not 3, 4, 5
+        if (act.name === "Course d'endurence Sec 3, 4, 5" && !['3','4','5'].includes(userGradeSelect.value)) {
+            return;
+        }
+        // Hide "Course navette (4x10m)" for grades not 1, 2, 3 (if that's the intent)
+        if (act.name === "Course navette (4x10m)" && !['1','2','3'].includes(userGradeSelect.value)) {
             return;
         }
         let crit;
-        if (act.name === 'test léger-navette' || act.name.toLowerCase().includes('navette')) {
+        // Only apply special age logic for test léger-navette
+        if (actNameTrimmed === 'test léger-navette') {
             let overrideAge = userAge;
             if (userGradeSelect.value === '3') overrideAge = 15;
             if (userGradeSelect.value === '4' || userGradeSelect.value === '5') overrideAge = 17;
@@ -218,6 +230,14 @@ function showGradingInputs() {
         document.getElementById('grading-form').onsubmit = function(e) {
             e.preventDefault();
             let total = 0;
+            let results = {
+                settings: {
+                    grade: userGradeSelect.value,
+                    gender: userGender,
+                    age: userAge
+                },
+                activities: []
+            };
             uploadedActivities.forEach((act, aidx) => {
                 let crit;
                 if (act.name === 'test léger-navette') {
@@ -233,77 +253,29 @@ function showGradingInputs() {
                 if (bidx !== undefined) {
                     const block = crit.scale[bidx];
                     total += block.points;
+                    let preciseScore = null;
+                    const sliderInput = document.getElementById(`slider-input-${aidx}`);
+                    if (sliderInput) {
+                        preciseScore = sliderInput.value;
+                    }
+                    results.activities.push({
+                        name: act.name,
+                        criteria: crit.criteria,
+                        blockRange: { min: block.min, max: block.max },
+                        blockPoints: block.points,
+                        preciseScore: preciseScore
+                    });
                 }
             });
+            let totalPossible = 0;
+            results.activities.forEach(a => { totalPossible += 10; }); // Assume 10 per activity for compatibility
             let percent = totalPossible ? ((total / totalPossible) * 100).toFixed(2) : '0.00';
-            // Add name input before download button
-            document.getElementById('grading-result').innerHTML = `
-                <strong>Total : ${total} / ${totalPossible} pts (${percent}%)</strong><br>
-                <label for="user-name-input">Votre nom : </label>
-                <input type="text" id="user-name-input" style="margin-right:10px;" placeholder="Entrez votre nom" required>
-                <button type="button" id="download-result-btn" style="margin-top:15px;">Télécharger JSON</button>
-            `;
-            // Download JSON logic
-            const downloadBtn = document.getElementById('download-result-btn');
-            if (downloadBtn) {
-                downloadBtn.onclick = function() {
-                    const userName = document.getElementById('user-name-input').value.trim();
-                    if (!userName) {
-                        alert('Veuillez entrer votre nom avant de télécharger.');
-                        return;
-                    }
-                    let results = {
-                        settings: {
-                            grade: userGradeSelect.value,
-                            gender: userGender,
-                            age: userAge
-                        },
-                        activities: []
-                    };
-                    uploadedActivities.forEach((act, aidx) => {
-                        let crit;
-                        if (act.name === 'test léger-navette') {
-                            let overrideAge = userAge;
-                            if (userGradeSelect.value === '3') overrideAge = 15;
-                            if (userGradeSelect.value === '4' || userGradeSelect.value === '5') overrideAge = 17;
-                            crit = act.criteria.find(c => c.gender === userGender && c.age === overrideAge);
-                        } else {
-                            crit = act.criteria.find(c => c.gender === userGender && c.age === userAge);
-                        }
-                        if (!crit) return;
-                        const bidx = selectedBlocks[aidx];
-                        if (bidx !== undefined) {
-                            const block = crit.scale[bidx];
-                            let preciseScore = null;
-                            const sliderInput = document.getElementById(`slider-input-${aidx}`);
-                            if (sliderInput) {
-                                preciseScore = sliderInput.value;
-                            }
-                            results.activities.push({
-                                name: act.name,
-                                criteria: crit.criteria,
-                                blockRange: { min: block.min, max: block.max },
-                                blockPoints: block.points,
-                                preciseScore: preciseScore
-                            });
-                        }
-                    });
-                    const dataStr = JSON.stringify(results, null, 2);
-                    const blob = new Blob([dataStr], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    // Build code: G/F + grade + age
-                    const genderCode = userGender === 'Boy' ? 'G' : (userGender === 'Girl' ? 'F' : 'X');
-                    const code = `${genderCode}${userGradeSelect.value}${userAge}`;
-                    const filename = `${userName}_${code}.json`;
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                };
-            }
+            results.total = total;
+            results.totalPossible = totalPossible;
+            results.percent = percent;
+            results.code = (userGender === 'Boy' ? 'G' : (userGender === 'Girl' ? 'F' : 'X')) + userGradeSelect.value + userAge;
+            localStorage.setItem('epv3_full_breakdown', JSON.stringify(results));
+            window.location.href = 'result.html';
         };
     }
     renderCurrentActivity(); // This call is now correctly placed at the end of showGradingInputs, to render the initial activity.

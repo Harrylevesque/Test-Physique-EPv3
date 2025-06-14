@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultat et Téléchargement</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Résultat</h1>
+    <div id="result-summary" style="font-size:1.2em;margin-bottom:20px;"></div>
+    <label for="user-name-input">Votre nom : </label>
+    <input type="text" id="user-name-input" style="margin-right:10px;" placeholder="Entrez votre nom" required>
+    <button type="button" id="download-result-btn" style="margin-top:15px;" disabled>Télécharger JSON</button>
+    <div id="user-details-table" style="margin-top:30px;"></div>
+</div>
+<script>
+// Try to load the full breakdown (old way) if available
+let fullBreakdown = null;
+try {
+    fullBreakdown = JSON.parse(localStorage.getItem('epv3_full_breakdown'));
+} catch (e) {}
+const resultData = fullBreakdown || JSON.parse(localStorage.getItem('epv3_result_data') || '{}');
+const summaryDiv = document.getElementById('result-summary');
+if (resultData && resultData.total !== undefined && resultData.totalPossible !== undefined && resultData.percent !== undefined) {
+    summaryDiv.innerHTML = `<strong>Total : ${resultData.total} / ${resultData.totalPossible} pts (${resultData.percent}%)</strong>`;
+} else {
+    summaryDiv.innerHTML = '<span style="color:red;">Aucun résultat à afficher.</span>';
+}
+
+const nameInput = document.getElementById('user-name-input');
+const downloadBtn = document.getElementById('download-result-btn');
+// Hide the download button initially
+if (!nameInput.value.trim()) {
+    downloadBtn.style.display = 'none';
+}
+nameInput.addEventListener('input', function() {
+    if (nameInput.value.trim()) {
+        downloadBtn.style.display = '';
+        downloadBtn.disabled = false;
+    } else {
+        downloadBtn.style.display = 'none';
+        downloadBtn.disabled = true;
+    }
+});
+downloadBtn.onclick = function() {
+    const userName = nameInput.value.trim();
+    if (!userName) return;
+    if (!resultData) return;
+    // Add name to resultData
+    resultData.userName = userName;
+    const dataStr = JSON.stringify(resultData, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    // Try to build code from settings if available
+    let code = resultData.code;
+    if (!code && resultData.settings) {
+        const g = resultData.settings.gender;
+        const gr = resultData.settings.grade;
+        const a = resultData.settings.age;
+        code = (g === 'Boy' ? 'G' : (g === 'Girl' ? 'F' : 'X')) + gr + a;
+    }
+    const filename = `${userName}_${code || 'result'}.json`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+
+const detailsDiv = document.getElementById('user-details-table');
+if (resultData && resultData.activities && Array.isArray(resultData.activities) && resultData.activities.length > 0) {
+    let activitiesArray = resultData.activities;
+    let scoresContent = '';
+    let totalActivityPointsSum = 0;
+    let totalActivityMaxPointsSum = 0;
+    scoresContent = activitiesArray.map(a => {
+        const activityName = a.name || 'N/A';
+        const criteria = a.criteria || '';
+        const blockRangeText = (a.blockRange && a.blockRange.min !== undefined && a.blockRange.max !== undefined)
+            ? `(${a.blockRange.min}-${a.blockRange.max})`
+            : '';
+        // If preciseScore is null/undefined, show the min of the blockRange if available
+        let preciseScoreDisplay;
+        if (a.preciseScore !== null && a.preciseScore !== undefined && a.preciseScore !== '') {
+            preciseScoreDisplay = String(a.preciseScore);
+        } else if (a.blockRange && a.blockRange.min !== undefined) {
+            preciseScoreDisplay = String(a.blockRange.min);
+        } else {
+            preciseScoreDisplay = 'N/A';
+        }
+        const pointsObtenus = (a.blockPoints !== undefined && a.blockPoints !== null)
+            ? Number(a.blockPoints)
+            : 0;
+        // Try to get max points for this activity (if available)
+        let pointsPossibles = 10;
+        if (resultData.totalPossible && activitiesArray.length > 0) {
+            pointsPossibles = Math.round(resultData.totalPossible / activitiesArray.length);
+        }
+        totalActivityPointsSum += pointsObtenus;
+        totalActivityMaxPointsSum += pointsPossibles;
+        return `<tr><td>${activityName}</td><td>${criteria}</td><td>${blockRangeText}</td><td>${preciseScoreDisplay}</td><td>${pointsObtenus}</td><td>${pointsPossibles}</td></tr>`;
+    }).join('');
+    let tableHtml = `<table border="1" cellpadding="5" style="border-collapse:collapse; width:auto; text-align:left; min-width: 100%; margin-top:30px;">
+        <thead>
+            <tr>
+                <th>Activité</th>
+                <th>Critère</th>
+                <th>Plage</th>
+                <th>Score précis</th>
+                <th>Points obtenus</th>
+                <th>Points possibles</th>
+            </tr>
+        </thead>
+        <tbody>${scoresContent}</tbody>
+        <tfoot><tr style="font-weight:bold;background:#f2f2f2;"><td colspan="4">Total</td><td>${totalActivityPointsSum}</td><td>${totalActivityMaxPointsSum}</td></tr></tfoot>
+    </table>`;
+    detailsDiv.innerHTML = tableHtml;
+} else {
+    detailsDiv.innerHTML = '<span style="color:#888;">Aucune activité détaillée trouvée.</span>';
+}
+
+// Show the full JSON breakdown below the table (now hidden by default)
+const jsonBreakdownDiv = document.createElement('div');
+jsonBreakdownDiv.style.marginTop = '40px';
+jsonBreakdownDiv.innerHTML = '<h2 style="font-size:1.1em;">Données complètes (JSON)</h2>';
+const pre = document.createElement('pre');
+pre.style.background = '#f8f8f8';
+pre.style.padding = '16px';
+pre.style.borderRadius = '8px';
+pre.style.overflowX = 'auto';
+pre.style.fontSize = '0.98em';
+pre.style.display = 'none'; // Hide by default
+pre.textContent = JSON.stringify(resultData, null, 2);
+jsonBreakdownDiv.appendChild(pre);
+const toggleBtn = document.createElement('button');
+toggleBtn.textContent = 'Afficher le JSON complet';
+toggleBtn.style.marginBottom = '10px';
+toggleBtn.onclick = function() {
+    if (pre.style.display === 'none') {
+        pre.style.display = 'block';
+        toggleBtn.textContent = 'Cacher le JSON complet';
+    } else {
+        pre.style.display = 'none';
+        toggleBtn.textContent = 'Afficher le JSON complet';
+    }
+};
+jsonBreakdownDiv.insertBefore(toggleBtn, pre);
+document.querySelector('.container').appendChild(jsonBreakdownDiv);
+</script>
+</body>
+</html>
