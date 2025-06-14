@@ -253,10 +253,26 @@ function showGradingInputs() {
                 if (bidx !== undefined) {
                     const block = crit.scale[bidx];
                     total += block.points;
-                    let preciseScore = null;
+                    let preciseScore;
                     const sliderInput = document.getElementById(`slider-input-${aidx}`);
                     if (sliderInput) {
-                        preciseScore = sliderInput.value;
+                        if (block.isTime) {
+                            // Only save if user changed from default
+                            if (sliderInput.value && sliderInput.value !== msToTime(block.min)) {
+                                preciseScore = sliderInput.value;
+                            } else {
+                                preciseScore = '';
+                            }
+                        } else {
+                            // Only save if user changed from default
+                            if (sliderInput.value !== '' && parseFloat(sliderInput.value) !== block.min) {
+                                preciseScore = parseFloat(sliderInput.value);
+                            } else {
+                                preciseScore = '';
+                            }
+                        }
+                    } else {
+                        preciseScore = '';
                     }
                     results.activities.push({
                         name: act.name,

@@ -4,6 +4,10 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    height: 100%;
+}
+html {
+    height: 100%;
 }
 .container {
     max-width: 900px;
@@ -17,6 +21,8 @@ body {
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255,255,255,0.3);
     position: relative;
+    min-height: 100vh;
+    height: 100%;
 }
 h1 {
     text-align: center;
@@ -234,13 +240,11 @@ button:hover {
     box-shadow: none;
 }
 .menu-fab-btn {
-    background: rgba(255,255,255,0.22);
-    box-shadow: 0 4px 24px 0 rgba(31,38,135,0.18);
-    backdrop-filter: blur(18px) saturate(180%);
-    -webkit-backdrop-filter: blur(18px) saturate(180%);
-    border: 1.5px solid rgba(255,255,255,0.35);
-    border-radius: 50%;
-    color: #222;
+    background: linear-gradient(135deg, rgba(220,220,230,0.65) 0%, rgba(200,210,230,0.55) 100%);
+    color: #232a33;
+    backdrop-filter: blur(10px) saturate(180%);
+    border: 1.5px solid rgba(180, 200, 230, 0.32);
+    box-shadow: 0 4px 24px rgba(120,130,160,0.13), 0 1.5px 0.5px rgba(180,200,230,0.12) inset;
     font-weight: 600;
     font-size: 1.3em;
     padding: 0;
@@ -265,15 +269,50 @@ button:hover {
     display: block;
 }
 .menu-fab-btn:hover {
-    background: rgba(127,170,255,0.7);
-    color: #fff;
-    box-shadow: 0 8px 32px rgba(127,170,255,0.22);
+    background: linear-gradient(135deg, rgba(240,245,255,0.82) 0%, rgba(210,220,240,0.65) 100%);
+    color: #1a2230;
+    box-shadow: 0 8px 32px rgba(120,130,160,0.22), 0 2px 1px rgba(180,200,230,0.18) inset;
     transform: translateY(-2px) scale(1.08);
 }
 .menu-fab-btn.menu-appear {
     transform: translateY(20px) scale(0.95);
     opacity: 0;
     animation: menuBtnIn 0.4s cubic-bezier(.4,2,.6,1) forwards;
+}
+.chart-selectors input[type="file"] {
+    display: none;
+}
+.chart-selectors #upload-distribution-label {
+    display: inline-block;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, rgba(220,220,230,0.65) 0%, rgba(200,210,230,0.55) 100%);
+    color: #232a33;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(120,130,160,0.10);
+    transition: background 0.2s;
+    margin-left: 8px;
+}
+.chart-selectors #upload-distribution-label:hover {
+    background: linear-gradient(135deg, rgba(240,245,255,0.82) 0%, rgba(210,220,240,0.65) 100%);
+}
+input[type="file"]#upload-json {
+  display: block;
+  margin-bottom: 20px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, rgba(220,220,230,0.65) 0%, rgba(200,210,230,0.55) 100%);
+  color: #232a33;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(120,130,160,0.10);
+  transition: background 0.2s;
+  width: auto;
+  max-width: 100%;
+}
+input[type="file"]#upload-json:hover {
+  background: linear-gradient(135deg, rgba(240,245,255,0.82) 0%, rgba(210,220,240,0.65) 100%);
 }
 @keyframes menuBtnIn {
     from {
@@ -285,4 +324,3 @@ button:hover {
         opacity: 1;
     }
 }
-

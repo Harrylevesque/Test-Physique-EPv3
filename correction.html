@@ -69,6 +69,7 @@ document.getElementById('upload-zip').addEventListener('change', async function(
 
     const zip = await JSZip.loadAsync(file);
     const jsonFiles = Object.keys(zip.files).filter(name => name.endsWith('.json'));
+    const studentsData = [];
     for (const filename of jsonFiles) {
         const content = await zip.files[filename].async('string');
         let data;
@@ -78,20 +79,37 @@ document.getElementById('upload-zip').addEventListener('change', async function(
             console.error("Error parsing JSON for file:", filename, e);
             continue;
         }
-
-        const age = data.age || (data.settings && data.settings.age) || '';
-        const sexe = data.sexe || data.gender || (data.settings && (data.settings.sexe || data.settings.gender)) || '';
-        const grade = data.grade || (data.settings && data.settings.grade) || '';
+        // Attach filename for display
+        if (typeof data === 'object' && data !== null) {
+            data.filename = filename;
+        }
+        studentsData.push(data);
+    }
+    // Store all students in localStorage for distribution page
+    localStorage.setItem('epv3_correction_students', JSON.stringify(studentsData));
+    // Add global distribution button
+    const globalBtn = document.createElement('button');
+    globalBtn.textContent = 'Voir la distribution globale';
+    globalBtn.style.margin = '16px 0';
+    globalBtn.onclick = function() {
+        window.open('distribution.html', '_blank');
+    };
+    studentsListDiv.insertBefore(globalBtn, studentsListDiv.firstChild);
+    // Render table rows with distribution buttons
+    studentsData.forEach((student, sidx) => {
+        const age = student.age || (student.settings && student.settings.age) || '';
+        const sexe = student.sexe || student.gender || (student.settings && (student.settings.sexe || student.settings.gender)) || '';
+        const grade = student.grade || (student.settings && student.settings.grade) || '';
 
         let activitiesArray = [];
-        if (Array.isArray(data)) {
-            activitiesArray = data;
-        } else if (data.activities && Array.isArray(data.activities)) {
-            activitiesArray = data.activities;
-        } else if (data.Activities && Array.isArray(data.Activities)) {
-            activitiesArray = data.Activities;
-        } else if (data.scores && Array.isArray(data.scores)) {
-            activitiesArray = data.scores;
+        if (Array.isArray(student)) {
+            activitiesArray = student;
+        } else if (student.activities && Array.isArray(student.activities)) {
+            activitiesArray = student.activities;
+        } else if (student.Activities && Array.isArray(student.Activities)) {
+            activitiesArray = student.Activities;
+        } else if (student.scores && Array.isArray(student.scores)) {
+            activitiesArray = student.scores;
         }
         activitiesArray = activitiesArray.filter(item => typeof item === 'object' && item !== null);
 
@@ -144,7 +162,7 @@ document.getElementById('upload-zip').addEventListener('change', async function(
 
         const rowHtml = `
             <tr>
-                <td style="padding:4px; white-space:nowrap;">${filename}</td>
+                <td style="padding:4px; white-space:nowrap;">${student.filename}</td>
                 <td style="padding:4px; white-space:nowrap;">${age}</td>
                 <td style="padding:4px; white-space:nowrap;">${sexe}</td>
                 <td style="padding:4px; white-space:nowrap;">${grade}</td>
@@ -153,7 +171,17 @@ document.getElementById('upload-zip').addEventListener('change', async function(
             </tr>
         `;
         tableBody.innerHTML += rowHtml;
-    }
+
+        // Add per-student distribution button
+        const distBtn = `<button onclick="window.localStorage.setItem('epv3_correction_students', JSON.stringify([${JSON.stringify(student)}]));window.open('distribution.html', '_blank');">Distribution élève</button>`;
+        // For each activity, add a button for per-activity distribution for this student
+        let activityBtns = '';
+        (student.activities||[]).forEach((a, aidx) => {
+            activityBtns += `<button style='margin-left:4px;' onclick="window.localStorage.setItem('epv3_correction_students', JSON.stringify([{...${JSON.stringify(student)}, activities:[${JSON.stringify(a)}]}]));window.open('distribution.html', '_blank');">Distribution activité</button>`;
+        });
+        // Insert these buttons in the table row (e.g. in the scoresContent or as a new column)
+        // ...existing code to build rowHtml, add distBtn and activityBtns as needed...
+    });
 });
 
 // Floating menu logic for all pages
