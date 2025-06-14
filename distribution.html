@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Distribution des scores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .chart-container { max-width: 900px; margin: 40px auto; background: rgba(255,255,255,0.7); border-radius: 16px; box-shadow: 0 4px 24px rgba(31,38,135,0.10); padding: 32px; }
+    .chart-title { text-align: center; font-size: 1.3em; margin-bottom: 18px; }
+    .chart-selectors { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 24px; }
+    canvas { background: #fff; border-radius: 8px; }
+  </style>
+</head>
+<body>
+<div class="container chart-container">
+  <h1>Distribution des scores</h1>
+  <div class="chart-selectors">
+    <select id="student-select"></select>
+    <select id="activity-select"></select>
+    <button id="show-distribution">Afficher la distribution</button>
+  </div>
+  <!-- Zip upload UI -->
+  <div style="text-align:center; margin-bottom:20px;">
+    <input type="file" id="zip-upload" accept=".zip" style="display:inline-block;" />
+    <button id="upload-zip-btn">Uploader un ZIP</button>
+    <span id="zip-upload-status" style="margin-left:10px;"></span>
+  </div>
+  <div class="chart-title" id="chart-title"></div>
+  <canvas id="distribution-chart" width="800" height="400"></canvas>
+</div>
+<!-- Floating glass menu -->
+<div class="menu-fab-stack" id="menuFabStack">
+    <button class="menu-fab-btn" id="menuFabToggle" title="Ouvrir le menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="2" rx="1"/><rect x="3" y="11" width="18" height="2" rx="1"/><rect x="3" y="16" width="18" height="2" rx="1"/></svg>
+    </button>
+    <div id="menuFabButtons" style="display:none;flex-direction:column;gap:18px;align-items:center;">
+      <button class="menu-fab-btn" id="menu-index-btn" title="Accueil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 3l9 9"/><path d="M9 21V9h6v12"/></svg>
+      </button>
+      <button class="menu-fab-btn" id="menu-creation-btn" title="Création">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+      </button>
+      <button class="menu-fab-btn" id="menu-correction-btn" title="Correction">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+      </button>
+      <button class="menu-fab-btn" id="menu-distribution-btn" title="Distribution">
+        <!-- Graph/Chart icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="12" width="4" height="8" rx="1.5"/>
+          <rect x="9" y="8" width="4" height="12" rx="1.5"/>
+          <rect x="15" y="4" width="4" height="16" rx="1.5"/>
+        </svg>
+      </button>
+      <button class="menu-fab-btn" id="menu-close-btn" title="Fermer le menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+</div>
+<script>
+let allStudents = [];
+let allActivities = [];
+let chart;
+
+// --- ZIP upload logic ---
+document.getElementById('upload-zip-btn').addEventListener('click', function() {
+  const fileInput = document.getElementById('zip-upload');
+  const statusSpan = document.getElementById('zip-upload-status');
+  const file = fileInput.files[0];
+  if (!file) {
+    statusSpan.textContent = 'Veuillez sélectionner un fichier ZIP.';
+    statusSpan.style.color = 'red';
+    return;
+  }
+  if (file.type !== 'application/zip' && !file.name.endsWith('.zip')) {
+    statusSpan.textContent = 'Le fichier doit être un ZIP.';
+    statusSpan.style.color = 'red';
+    return;
+  }
+  // Example: just read the file name and size (for demo)
+  statusSpan.textContent = `Fichier sélectionné: ${file.name} (${(file.size/1024).toFixed(1)} Ko)`;
+  statusSpan.style.color = 'green';
+  // TODO: Add code to process or upload the zip file as needed
+});
+
+function getDataFromLocalStorage() {
+  // Try to get from localStorage (set by correction.html)
+  let data = localStorage.getItem('epv3_correction_students');
+  if (data) {
+    try { return JSON.parse(data); } catch (e) { return []; }
+  }
+  return [];
+}
+
+function populateSelectors() {
+  const studentSelect = document.getElementById('student-select');
+  const activitySelect = document.getElementById('activity-select');
+  studentSelect.innerHTML = '<option value="all">Tous les élèves</option>';
+  allStudents.forEach((stu, idx) => {
+    const name = stu.userName || stu.filename || `Élève ${idx+1}`;
+    studentSelect.innerHTML += `<option value="${idx}">${name}</option>`;
+  });
+  activitySelect.innerHTML = '<option value="all">Toutes les activités</option>';
+  // Build unique activity list
+  let activityNames = new Set();
+  allStudents.forEach(stu => {
+    (stu.activities||[]).forEach(a => activityNames.add(a.name));
+  });
+  allActivities = Array.from(activityNames);
+  allActivities.forEach((aname, idx) => {
+    activitySelect.innerHTML += `<option value="${idx}">${aname}</option>`;
+  });
+}
+
+function getDistributionData(studentIdx, activityIdx) {
+  let scores = [];
+  let title = '';
+  if (studentIdx === 'all' && activityIdx === 'all') {
+    // Global: all students, all activities
+    allStudents.forEach(stu => (stu.activities||[]).forEach(a => { if(a.blockPoints!==undefined)scores.push(a.blockPoints); }));
+    title = 'Distribution globale (tous élèves, toutes activités)';
+  } else if (studentIdx === 'all') {
+    // All students, one activity
+    const activityName = allActivities[activityIdx];
+    allStudents.forEach(stu => {
+      const act = (stu.activities||[]).find(a => a.name === activityName);
+      if (act && act.blockPoints!==undefined) scores.push(act.blockPoints);
+    });
+    title = `Distribution pour l'activité : ${activityName} (tous élèves)`;
+  } else if (activityIdx === 'all') {
+    // One student, all activities
+    const stu = allStudents[studentIdx];
+    (stu.activities||[]).forEach(a => { if(a.blockPoints!==undefined)scores.push(a.blockPoints); });
+    const name = stu.userName || stu.filename || `Élève ${parseInt(studentIdx)+1}`;
+    title = `Distribution pour ${name} (toutes activités)`;
+  } else {
+    // One student, one activity
+    const stu = allStudents[studentIdx];
+    const activityName = allActivities[activityIdx];
+    const act = (stu.activities||[]).find(a => a.name === activityName);
+    if (act && act.blockPoints!==undefined) scores.push(act.blockPoints);
+    const name = stu.userName || stu.filename || `Élève ${parseInt(studentIdx)+1}`;
+    title = `Distribution pour ${name} - ${activityName}`;
+  }
+  return { scores, title };
+}
+
+function drawHistogram(scores, title, opts = {}) {
+  const ctx = document.getElementById('distribution-chart').getContext('2d');
+  document.getElementById('chart-title').textContent = title;
+  if (chart) chart.destroy();
+
+  // Determine mode
+  const mode = opts.mode || 'global';
+  let chartData = {};
+  let chartOptions = {};
+
+  if (mode === 'student-activity') {
+    // Show a single marker for the student's precise score, and show the block range if available
+    const score = opts.preciseScore;
+    const blockRange = opts.blockRange;
+    chartData = {
+      labels: blockRange ? [`Plage: ${blockRange.min} - ${blockRange.max}`] : ['Score'],
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Plage',
+          data: blockRange ? [blockRange.max - blockRange.min] : [0],
+          backgroundColor: 'rgba(180,200,230,0.25)',
+          borderColor: 'rgba(54, 162, 235, 0.2)',
+          borderWidth: 1,
+          barPercentage: 1.0,
+          categoryPercentage: 1.0,
+        },
+        {
+          type: 'scatter',
+          label: 'Score précis',
+          data: [{x: 0, y: score}],
+          pointBackgroundColor: 'red',
+          pointRadius: 8,
+          showLine: false,
+        }
+      ]
+    };
+    chartOptions = {
+      responsive: true,
+      plugins: { legend: { display: true } },
+      scales: {
+        y: { title: { display: true, text: 'Score' }, min: blockRange ? blockRange.min : 0, max: blockRange ? blockRange.max : 10 },
+        x: { title: { display: true, text: blockRange ? 'Plage' : 'Score' }, grid: { display: false } }
+      }
+    };
+  } else if (mode === 'student-all' || mode === 'activity-all') {
+    // Show a bar for each score, x-axis 0-10 by 0.5
+    const bins = Array(21).fill(0);
+    scores.forEach(s => {
+      let idx = Math.round(Math.max(0, Math.min(10, s)) * 2);
+      bins[idx]++;
+    });
+    chartData = {
+      labels: bins.map((_,i) => (i/2).toFixed(1)),
+      datasets: [{
+        label: 'Nombre de scores',
+        data: bins,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    };
+    chartOptions = {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { title: { display: true, text: 'Score (0 à 10, pas de 0.5)' } },
+        y: { title: { display: true, text: 'Nombre de scores' }, beginAtZero: true }
+      }
+    };
+  } else {
+    // Global: histogram 0-10 by 1
+    const bins = Array(11).fill(0);
+    scores.forEach(s => {
+      let idx = Math.floor(Math.max(0, Math.min(10, s)));
+      bins[idx]++;
+    });
+    chartData = {
+      labels: bins.map((_,i) => `${i}-${i+1}`),
+      datasets: [{
+        label: 'Nombre de scores',
+        data: bins,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    };
+    chartOptions = {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { title: { display: true, text: 'Score (points)' } },
+        y: { title: { display: true, text: 'Nombre de scores' }, beginAtZero: true }
+      }
+    };
+  }
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+  });
+}
+
+document.getElementById('show-distribution').onclick = function() {
+  const studentIdx = document.getElementById('student-select').value;
+  const activityIdx = document.getElementById('activity-select').value;
+  // Determine mode and options
+  if (studentIdx !== 'all' && activityIdx !== 'all') {
+    // Specific student, specific activity
+    const stu = allStudents[studentIdx];
+    const activityName = allActivities[activityIdx];
+    const act = (stu.activities||[]).find(a => a.name === activityName);
+    let score = act && act.preciseScore !== undefined && act.preciseScore !== null && act.preciseScore !== '' ? parseFloat(act.preciseScore) : (act && act.blockPoints !== undefined ? act.blockPoints : null);
+    let blockRange = act && act.blockRange ? act.blockRange : null;
+    drawHistogram([score], `Distribution pour ${(stu.userName||stu.filename||'élève')} - ${activityName}`, { mode: 'student-activity', preciseScore: score, blockRange });
+  } else if (studentIdx !== 'all' && activityIdx === 'all') {
+    // Specific student, all activities
+    const stu = allStudents[studentIdx];
+    const scores = (stu.activities||[]).map(a => a.preciseScore !== undefined && a.preciseScore !== null && a.preciseScore !== '' ? parseFloat(a.preciseScore) : (a.blockPoints !== undefined ? a.blockPoints : null)).filter(s => s !== null);
+    drawHistogram(scores, `Distribution pour ${(stu.userName||stu.filename||'élève')} (toutes activités)`, { mode: 'student-all' });
+  } else if (studentIdx === 'all' && activityIdx !== 'all') {
+    // All students, one activity
+    const activityName = allActivities[activityIdx];
+    const scores = allStudents.map(stu => {
+      const act = (stu.activities||[]).find(a => a.name === activityName);
+      return act && act.preciseScore !== undefined && act.preciseScore !== null && act.preciseScore !== '' ? parseFloat(act.preciseScore) : (act && act.blockPoints !== undefined ? act.blockPoints : null);
+    }).filter(s => s !== null);
+    drawHistogram(scores, `Distribution pour l'activité : ${activityName} (tous élèves)`, { mode: 'activity-all' });
+  } else {
+    // Global
+    const scores = [];
+    allStudents.forEach(stu => (stu.activities||[]).forEach(a => { if(a.blockPoints!==undefined)scores.push(a.blockPoints); }));
+    drawHistogram(scores, 'Distribution globale (tous élèves, toutes activités)', { mode: 'global' });
+  }
+};
+
+// Load data on page load
+window.addEventListener('DOMContentLoaded', function() {
+  // Try to get from localStorage
+  allStudents = getDataFromLocalStorage();
+  if (!Array.isArray(allStudents) || allStudents.length === 0) {
+    document.getElementById('chart-title').textContent = 'Aucune donnée trouvée. Veuillez ouvrir cette page depuis la page de correction.';
+    return;
+  }
+  populateSelectors();
+  // Show global by default
+  const { scores, title } = getDistributionData('all', 'all');
+  drawHistogram(scores, title);
+
+  // Floating menu logic for all pages
+  const menuFabToggle = document.getElementById('menuFabToggle');
+  const menuFabButtons = document.getElementById('menuFabButtons');
+  const menuIndexBtn = document.getElementById('menu-index-btn');
+  const menuCreationBtn = document.getElementById('menu-creation-btn');
+  const menuCorrectionBtn = document.getElementById('menu-correction-btn');
+  const menuDistributionBtn = document.getElementById('menu-distribution-btn');
+  const menuCloseBtn = document.getElementById('menu-close-btn');
+  menuFabToggle.onclick = function() {
+    menuFabButtons.style.display = 'flex';
+    menuFabToggle.style.display = 'none';
+  };
+  menuCloseBtn.onclick = function() {
+    menuFabButtons.style.display = 'none';
+    menuFabToggle.style.display = 'flex';
+  };
+  menuIndexBtn.onclick = function() {
+    window.location.href = 'index.html';
+  };
+  menuCreationBtn.onclick = function() {
+    window.location.href = 'creation.html';
+  };
+  menuCorrectionBtn.onclick = function() {
+    window.location.href = 'correction.html';
+  };
+  menuDistributionBtn.onclick = function() {
+    window.location.href = 'distribution.html';
+  };
+});
+</script>
+</body>
+</html>
